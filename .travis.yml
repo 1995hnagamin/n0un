@@ -4,7 +4,7 @@ addons:
   apt:
     sources:
       - omake
-script: bash -ex .travis-opam.sh
+script: omake test
 env:
   - OCAML_VERSION=4.01
 os:
