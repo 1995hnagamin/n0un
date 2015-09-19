@@ -1,5 +1,3 @@
-OCAMLFLAGS += -Wa
-
 NATIVE_ENABLED = true
 BYTE_ENABLED = true
 
