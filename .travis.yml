@@ -1,6 +1,7 @@
 language: c
 sudo: required
 script:
+  - apt-cache search opam
   - sudo apt-get install omake ocaml opam
   - opam install ounit
   - omake test
