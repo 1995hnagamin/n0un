@@ -7,6 +7,8 @@ USE_OCAMLFIND = true
 OCAMLPACKS[] =
 	oUnit
 
+NATIEV_ENABLED = false
+
 TESTER = test
 OCAMLINCLUDES += ../src
 OCAML_LIBS += ../src/n0unlib
@@ -17,3 +19,10 @@ all: $(OCamlProgram $(TESTER), $(FILES))
 
 test :	all
 				./$(TESTER)
+
+.PHONY: clean
+clean:
+  rm -f \
+     $(filter-proper-targets $(glob $(addsuffix .*, $(FILES)))) \
+		 $(TESTER).run $(TESTER).opt $(TESTER) *.omc \
+		 *.cache

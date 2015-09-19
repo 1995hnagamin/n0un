@@ -21,4 +21,5 @@ OCamlLibrary($(LIB), $(FILES))
 clean:
   rm -f \
      $(filter-proper-targets $(glob $(addsuffix .*, $(FILES)))) \
-     $(PROGRAM).run $(PROGRAM).opt *.omc
+		 $(PROGRAM).run $(PROGRAM).opt *.omc \
+		 $(LIB).cma $(LIB).a $(LIB).cmxa
