@@ -1,0 +1,19 @@
+.PHONY: all test
+
+FILES[] =
+	test_parser
+
+USE_OCAMLFIND = true
+OCAMLPACKS[] =
+	oUnit
+
+TESTER = test
+OCAMLINCLUDES += ../src
+OCAML_LIBS += ../src/n0unlib
+
+.DEFAULT: all
+
+all: $(OCamlProgram $(TESTER), $(FILES))
+
+test :	all
+				./$(TESTER)

@@ -1,4 +1,5 @@
 PROGRAM = n0un
+LIB = n0unlib
 
 FILES[] =
 	syntax
@@ -10,9 +11,11 @@ FILES[] =
 OCamlGeneratedFiles(lexer.ml parser.mli parser.ml)
 
 OCamlProgram($(PROGRAM), $(FILES))
+OCamlLibrary($(LIB), $(FILES))
 
 .DEFAULT: $(if $(BYTE_ENABLED), $(PROGRAM).run) \
           $(if $(NATIVE_ENABLED), $(PROGRAM).opt)
+
 
 .PHONY: clean
 clean:
