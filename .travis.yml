@@ -1,7 +1,7 @@
 language: c
 sudo: required
 script:
-  - sudo apt-get install omake
+  - sudo apt-get install omake ocaml
   - omake test
 env:
   - OCAML_VERSION=4.01
