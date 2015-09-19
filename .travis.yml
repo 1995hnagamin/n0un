@@ -1,6 +1,9 @@
 language: c
 sudo: false
-install: wget https://raw.githubusercontent.com/ocaml/ocaml-travisci-skeleton/master/.travis-opam.sh
+addons:
+  apt:
+    sources:
+      - omake
 script: bash -ex .travis-opam.sh
 env:
   - OCAML_VERSION=4.01
