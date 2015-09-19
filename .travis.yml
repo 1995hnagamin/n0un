@@ -1,10 +1,8 @@
 language: c
-sudo: false
-addons:
-  apt:
-    sources:
-      - omake
-script: omake test
+sudo: required
+script:
+  - sudo apt-get install omake
+  - omake test
 env:
   - OCAML_VERSION=4.01
 os:
