@@ -1,5 +1,5 @@
 language: c
-sudo: required
+sudo: false
 install: wget https://raw.githubusercontent.com/ocaml/ocaml-travisci-skeleton/master/.travis-opam.sh
 script: bash -ex .travis-opam.sh
 env:
