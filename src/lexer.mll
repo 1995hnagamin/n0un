@@ -26,7 +26,8 @@ rule main = parse
 | "]"  { Parser.RBRAKET }
 | "->" { Parser.RARROW }
 | ";;" { Parser.SEMISEMI }
-| "@" ['0'-'9'] "/" ['0'-'9']
+| ","  { Parser.COMMA }
+| "@" ['0'-'9']+ "/" ['0'-'9']+
   { Parser.PROJECTOR (proj_of_string (Lexing.lexeme lexbuf)) }
 | ['a'-'z']['a'-'z' '0'-'9' '_']*
   { let id = Lexing.lexeme lexbuf in maybe_assoc (Parser.ID id) id reserverWords }

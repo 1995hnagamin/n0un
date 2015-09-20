@@ -3,25 +3,37 @@ open Syntax
 
 let parse str = Parser.toplevel Lexer.main (Lexing.from_string str)
 
-let test_10 test_ctxt     = assert_equal (Int 10) (parse "10;;")
-let test_zero test_ctxt   = assert_equal Zero (parse "zero;;")
-let test_succ test_ctxt   = assert_equal Succ (parse "succ;;")
-let test_proj test_ctxt   = assert_equal ( Proj(1, 10) ) (parse "@1/10;;")
-let test_comp1 test_ctxt  = assert_equal ( Comp(Succ, [Zero])  )(parse "succ[zero];;")
-let test_comp2 test_ctxt  = assert_equal ( Comp(Proj(1,4), [Proj(1,3); Proj(2,3); Proj(3,3); Proj(1, 3)])) (parse "@1/4[@1/3, @2/3, @3/3, @1/3];;")
-let test_prec test_ctxt   = assert_equal ( PRec(Proj(1,2), Zero) ) (parse "@1/2 -> zero;;")
+let parse_result_test program expr =
+  ("test " ^ program) >:: 
+    (fun test_ctxt -> assert_equal (parse program) expr)
 
-let suite =
-  "parser test" >::: [
-    "test 10" >:: test_10;
-    "test zero" >:: test_zero;
-    "test succ" >:: test_succ;
-    "test @1/10;;" >:: test_proj;
-    "test succ[zero];;" >:: test_comp1;
-    "test @1/4[@1/3, @2/3, @3/3, @1/3];;" >:: test_comp2;
-    "test @1/2 -> zero;;" >:: test_prec
-  ]
-;;
+let parser_tests =
+  List.map (fun (x, y) -> parse_result_test x y) [
+    "10;;", Int 10;
+    "zero;;", Zero;
+    "succ;;", Succ;
+    "@1/10;;", Proj(1, 10);
+    "succ[zero];;", Comp(Succ, [Zero]);
+    "@1/4[@1/3, @2/3, @3/3, @1/3];;", 
+      Comp(Proj(1,4), [Proj(1,3); Proj(2,3); Proj(3,3); Proj(1,3)]);
+    "@1/2 -> zero;;", PRec(Proj(1,2), Zero);
+    "zero();;", App(Zero, []);
+    "succ(0);;", App(Succ, [Int 0]);
+    "@1/3(zero(), succ(0), @1/2(2, 3));;",
+      App (Proj(1, 3),
+           [App (Zero, []);
+            App (Succ, [Int 0]);
+            App (Proj(1,2), [Int 2; Int 3])]);
+    "@1/2->zero(0);;", PRec(Proj(1,2), App(Zero, [Int 0]));
+    "(@1/2->zero)(0);;", App(PRec(Proj(1,2), Zero), [Int 0]);
+    "succ[zero](0);;", App(Comp(Succ, [Zero]), [Int 0]);
+    "@1/3 -> @2/2 -> zero;;",
+      PRec(Proj(1,3), PRec(Proj(2,2), Zero));
+    "@1/4 -> @1/2[zero, zero];;",
+      PRec(Proj(1,4), Comp(Proj(1,2), [Zero; Zero]));
+]
+
+let suite = "test parser" >::: parser_tests
 
 exception Failure
 
