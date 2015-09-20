@@ -23,5 +23,17 @@ let suite =
   ]
 ;;
 
-let _ = run_test_tt_main suite
+exception Failure
+
+let is_failure = function
+  RSuccess _ -> false
+| _ -> true
+
+let _ = 
+  let results = run_test_tt suite in
+  if List.exists is_failure results
+  then
+    raise Failure
+  else
+    ()
 
