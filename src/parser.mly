@@ -26,22 +26,22 @@ Expr :
   RExpr { $1 }
 
 RExpr :
-  RExpr RARROW CExpr { (PRec ($1, $3)) }
+  AExpr RARROW RExpr { (PRec ($1, $3)) }
+| AExpr { $1 }
+
+AExpr :
+  CExpr LPAREN RPAREN { App ($1, []) }
+| CExpr LPAREN Composee RPAREN { App ($1, $3) }
 | CExpr { $1 }
 
 CExpr :
-  AExpr LBRAKET RBRAKET { (Comp ($1, [])) }
-| AExpr LBRAKET Composee RBRAKET { (Comp ($1, $3)) }
-| AExpr { $1 }
+  IExpr LBRAKET RBRAKET { (Comp ($1, [])) }
+| IExpr LBRAKET Composee RBRAKET { (Comp ($1, $3)) }
+| IExpr { $1 }
 
 Composee :
   Expr { [$1] }
 | Expr COMMA Composee { $1::$3 }
-
-AExpr :
-  IExpr LPAREN RPAREN { App ($1, []) }
-| IExpr LPAREN Composee RPAREN { App ($1, $3) }
-| IExpr { $1 }
 
 IExpr :
   INTV { Int $1 }
