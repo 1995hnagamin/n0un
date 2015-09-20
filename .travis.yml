@@ -7,7 +7,7 @@ script:
   - export OPAMYES=1
   - opam init
   - opam install ounit omake
-  - cd 1995hnagamin/N0un
+  - export PATH=$HOME/.opam/system/bin:$PATH
   - omake test
 env:
   - OCAML_VERSION=4.01
