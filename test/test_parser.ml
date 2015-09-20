@@ -39,7 +39,7 @@ let precedence_tests =
     "succ[zero](0);;",          "(succ[zero]) (0);;";
     "@1/2->zero(0);;",          "@1/2 -> (zero(0));;";
     "succ.succ(0);;",           "succ . (succ(0));;";
-    "succ.@1/2->zero;;",        "succ . (@1/2->zero);;";
+    "succ.@1/2->zero;;",        "(succ.@1/2) -> zero;;";
     "@1/2->@1/2[zero,zero];;",  "@1/2 -> (@1/2[zero,zero]);;";
   ]
 ;;
