@@ -1,0 +1,15 @@
+language: c
+sudo: required
+script:
+  - yes | sudo add-apt-repository ppa:avsm/ppa
+  - sudo apt-get update
+  - sudo apt-get install ocaml ocaml-native-compilers camlp4-extra opam
+  - export OPAMYES=1
+  - opam init
+  - opam install ounit omake
+  - export PATH=$HOME/.opam/system/bin:$PATH
+  - omake test
+env:
+  - OCAML_VERSION=4.01
+os:
+  - linux
