@@ -4,8 +4,9 @@ script:
   - yes | sudo add-apt-repository ppa:avsm/ppa
   - sudo apt-get update
   - sudo apt-get install ocaml ocaml-native-compilers camlp4-extra opam omake
-  - yes | opam init
-  - yes | opam install ounit
+  - export OPAMYES=1
+  - opam init
+  - opam install ounit
   - omake test
 env:
   - OCAML_VERSION=4.01
