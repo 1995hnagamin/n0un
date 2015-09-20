@@ -24,6 +24,9 @@ let parser_tests =
            [App (Zero, []);
             App (Succ, [Int 0]);
             App (Proj(1,2), [Int 2; Int 3])]);
+    "@1/2->zero(0);;", PRec(Proj(1,2), App(Zero, [Int 0]));
+    "(@1/2->zero)(0);;", App(PRec(Proj(1,2), Zero), [Int 0]);
+    "succ[zero](0);;", App(Comp(Succ, [Zero]), [Int 0]);
 ]
 
 let suite = "test parser" >::: parser_tests
