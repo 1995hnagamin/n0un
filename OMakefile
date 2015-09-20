@@ -1,4 +1,4 @@
 NATIVE_ENABLED = true
 BYTE_ENABLED = true
 
-.SUBDIRS: src
+.SUBDIRS: src test
