@@ -55,6 +55,7 @@ IExpr :
   INTV { Int $1 }
 | ZERO { Zero }
 | SUCC { Succ }
+| ID   { Var $1 }
 | Projection { $1 }
 | LPAREN Expr RPAREN { $2 }
 
