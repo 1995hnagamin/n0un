@@ -2,6 +2,7 @@ type id = string
 
 type exp =
   Int of int
+| Var of id
 | App of exp * exp list
 | Zero
 | Succ
@@ -11,6 +12,7 @@ type exp =
 
 let rec string_of_exp = function
   Int n -> string_of_int n
+| Var x -> x
 | App (f, xs) ->
     let f = string_of_exp f
     and xs = List.map string_of_exp xs in
