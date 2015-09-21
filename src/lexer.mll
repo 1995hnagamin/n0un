@@ -25,6 +25,7 @@ rule main = parse
 | "["  { Parser.LBRAKET }
 | "]"  { Parser.RBRAKET }
 | "->" { Parser.RARROW }
+| "."  { Parser.DOT }
 | ";;" { Parser.SEMISEMI }
 | ","  { Parser.COMMA }
 | "@" ['0'-'9']+ "/" ['0'-'9']+

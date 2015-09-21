@@ -3,7 +3,7 @@ open Syntax
 
 %}
 %token LPAREN RPAREN LBRAKET RBRAKET
-%token RARROW COMMA SEMISEMI
+%token RARROW DOT COMMA SEMISEMI
 %token ZERO SUCC
 
 %token <int> INTV
@@ -26,7 +26,11 @@ Expr :
   RExpr { $1 }
 
 RExpr :
-  AExpr RARROW RExpr { (PRec ($1, $3)) }
+  DExpr RARROW RExpr { (PRec ($1, $3)) }
+| DExpr { $1 }
+
+DExpr :
+  AExpr DOT DExpr { Comp($1, [$3]) }
 | AExpr { $1 }
 
 AExpr :

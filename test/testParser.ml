@@ -18,6 +18,7 @@ let parse_tests =
     "succ[zero];;", Comp(Succ, [Zero]);
     "@1/4[@1/3, @2/3, @3/3, @1/3];;", 
       Comp(Proj(1,4), [Proj(1,3); Proj(2,3); Proj(3,3); Proj(1,3)]);
+    "succ.zero;;", Comp(Succ, [Zero]);
     "@1/2 -> zero;;", PRec(Proj(1,2), Zero);
     "zero();;", App(Zero, []);
     "succ(0);;", App(Succ, [Int 0]);
@@ -38,12 +39,15 @@ let precedence_tests =
   List.map (fun (s, t) -> prog_eql_test s t) [
     "succ[zero](0);;",          "(succ[zero]) (0);;";
     "@1/2->zero(0);;",          "@1/2 -> (zero(0));;";
+    "succ.succ(0);;",           "succ . (succ(0));;";
+    "succ.@1/2->zero;;",        "(succ.@1/2) -> zero;;";
     "@1/2->@1/2[zero,zero];;",  "@1/2 -> (@1/2[zero,zero]);;";
   ]
 ;;
 
 let associativity_tests =
   List.map (fun (s, t) -> prog_eql_test s t) [
+    "succ.succ.zero;;",   "succ . (succ.zero);;";
     "@1/3->@2/2->zero;;", "@1/3 -> (@2/2 -> zero);;";
   ]
 ;;
