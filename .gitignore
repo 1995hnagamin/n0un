@@ -14,6 +14,9 @@ _build/
 # ocamlbuild targets
 *.byte
 *.native
+*.opt
+*.run
+test/test
 
 # oasis generated files
 setup.data
@@ -22,3 +25,7 @@ setup.log
 # OMake
 *.omc
 .omakedb*
+
+# editors
+*.swp
+*~
