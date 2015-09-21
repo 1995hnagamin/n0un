@@ -1,32 +1,35 @@
 open Syntax
 open Util
 
-let print_program = function
-  [] -> print_string ""
-| (Exp expr)::_ ->
-    (print_string << string_of_ty << Typing.eval_ty Environment.empty) expr;
-    print_string " : ";
-    (print_string << string_of_exp << Eval.eval Environment.empty) expr;
-    print_newline ();
+let print_program env tyenv =
+  Exec.exec
+    (fun id expr ty_e ->
+      print_string id;
+      print_string " = ";
+      (print_string << string_of_exp) expr;
+      print_string " : ";
+      (print_string << string_of_ty) ty_e;
+      print_newline ())
+    env tyenv
 ;;
 
-let rec rep x =
+let rec repl env tyenv =
   print_string "# ";
   flush stdout;
   let line = read_line () in
   let program = Parser.toplevel Lexer.main (Lexing.from_string line) in
-  print_program program;
-  rep (x + 1)
+  let (env, tyenv) = print_program env tyenv program in
+  repl env tyenv
 ;;
 
 let exec_file filename =
   let ic = open_in filename in
   let program = Parser.toplevel Lexer.main (Lexing.from_channel ic) in
-  print_program program
+  print_program Environment.empty Environment.empty program
 ;;
 
 let _ =
   if Array.length Sys.argv > 1
   then exec_file Sys.argv.(1)
-  else rep 0
+  else repl Environment.empty Environment.empty
 ;;
