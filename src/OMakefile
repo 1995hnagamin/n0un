@@ -3,6 +3,7 @@ LIB = n0unlib
 
 FILES[] =
 	syntax
+	util
 	parser
 	lexer
 	eval

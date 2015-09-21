@@ -1,4 +1,5 @@
 open OUnit
+open TestUtil
 open Syntax
 
 let parse str = Parser.toplevel Lexer.main (Lexing.from_string str)
@@ -51,17 +52,4 @@ let parser_tests = parse_tests @ precedence_tests @ associativity_tests
 
 let suite = "test parser" >::: parser_tests
 
-exception Failure
-
-let is_failure = function
-  RSuccess _ -> false
-| _ -> true
-
-let _ = 
-  let results = run_test_tt suite in
-  if List.exists is_failure results
-  then
-    raise Failure
-  else
-    ()
-
+let _ = run_throwable_test suite

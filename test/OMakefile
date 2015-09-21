@@ -1,7 +1,9 @@
 .PHONY: all test
 
 FILES[] =
-	test_parser
+	testUtil
+	testParser
+	testTyping
 
 USE_OCAMLFIND = true
 OCAMLPACKS[] =

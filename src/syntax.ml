@@ -11,3 +11,8 @@ type exp =
 
 type program = exp
 ;;
+
+type ty =
+  TyInt
+| TyPFun of int (* primitive recursive function N^k -> N *)
+| TyRFun of int (* recursive function N^k -> N *)
