@@ -6,6 +6,8 @@ FILES[] =
 	util
 	parser
 	lexer
+	environment
+	typing
 	eval
 	main
 

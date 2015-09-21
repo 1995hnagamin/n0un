@@ -7,6 +7,8 @@ let is_same_as f = function
     List.for_all (fun x -> f x = a) xs
 ;;
 
+let is_different f xs = not (is_same_as f xs)
+
 let (<<) g f x = g(f(x))
 
 let comp g f = Comp(g, [f])

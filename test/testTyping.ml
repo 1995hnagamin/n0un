@@ -23,7 +23,9 @@ let ty_eql_tests =
 ;;
 
 let ty_err_test = fun (title, expr, err) ->
-  title >:: (fun test_ctxt -> assert_raises (Typing_error err) (fun () -> eval_ty expr))
+  title >:: 
+    (fun test_ctxt -> 
+      assert_raises (Typing_error err) (fun () -> eval_ty Environment.empty expr))
 
 let untyped_expr_tests =
   List.map ty_err_test [
