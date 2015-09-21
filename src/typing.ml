@@ -42,8 +42,11 @@ let rec eval_ty env = function
         raise (Typing_error "Non-integer object is applied")
     | _ when k != List.length xs ->
         raise (Typing_error "Arity doesn't match")
-    | _ -> TyInt
-      )
+    | _ -> TyInt)
+| LetExp (x, v, body) ->
+    let ty_v = eval_ty env v in
+    let env' = Environment.extend x ty_v env in
+    eval_ty env' body
 | Zero -> TyPFun 0
 | Succ -> TyPFun 1
 | Proj(x, y) -> TyPFun y

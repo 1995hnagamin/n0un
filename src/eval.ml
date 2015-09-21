@@ -29,4 +29,8 @@ and apply_prec g f = function
 
 let rec eval env = function
   App(f, xs) -> apply (eval env f) (List.map (eval env) xs)
+| LetExp(x, v, body) ->
+    let v = eval env v in
+    let env = Environment.extend x v env in
+    eval env body
 | x -> x

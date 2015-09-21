@@ -4,6 +4,7 @@ type exp =
   Int of int
 | Var of id
 | App of exp * exp list
+| LetExp of id * exp * exp
 | Zero
 | Succ
 | Proj of (int * int)
@@ -17,6 +18,10 @@ let rec string_of_exp = function
     let f = string_of_exp f
     and xs = List.map string_of_exp xs in
     f ^ "(" ^ String.concat "," xs ^ ")"
+| LetExp (x, v, body) ->
+    let v = string_of_exp v
+    and body = string_of_exp body in
+    "let " ^ x ^ "=" ^ v ^ " in " ^ body
 | Zero -> "zero"
 | Succ -> "succ"
 | Proj(x, y) -> "@" ^ string_of_int x ^ "/" ^ string_of_int y
