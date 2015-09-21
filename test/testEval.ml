@@ -29,6 +29,7 @@ let eval_eql_tests =
     "(@1/2->zero)(43)", Int 42, app (PRec(Proj(1,2), Zero)) 43;
     "(succ.@3/3->@1/1)(10, 5)", Int 15,
       apps (PRec(comp Succ (Proj(3,3)), Proj(1,1))) [10; 5];
+    "let x = 10 in x", Int 10, LetExp("x", Int 10, Var "x");
     "let fo_tw = 42 in succ(fo_tw)", Int 43,
       LetExp("fo_tw", Int 42, App(Succ, [Var "fo_tw"]));
     "let u = @4/4 in u(1,2,3,4)", Int 4,
@@ -39,7 +40,6 @@ let eval_eql_tests =
         PRec(Comp(Var "add", [proj 1 3; proj 3 3]),
           PRec(proj 2 2, Zero)),
       apps (Var "mul") [6; 7]));
-
   ]
 ;;
 
