@@ -8,7 +8,6 @@ let apply_succ = function
 | _ -> raise (Runtime_error "Only integer succeeds")
 
 let rec apply f xs = 
-  (Printf.printf "%s\n" << string_of_exp) (App (f, xs));
   match f with
   Zero -> Int 0
 | Succ -> apply_succ (List.hd xs)
@@ -22,7 +21,6 @@ let rec apply f xs =
 and apply_prec g f = function
   (Int 0)::xs -> apply f (List.rev xs)
 | (Int n)::xs ->
-    (Printf.printf "%s\n" << string_of_exp) (App(PRec(g, f), (Int n)::xs));
     let y = Int (n - 1) in
     let z = apply_prec g f (y::xs) in
     apply g (List.rev (z::y::xs))
