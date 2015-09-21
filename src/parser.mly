@@ -5,6 +5,7 @@ open Syntax
 %token LPAREN RPAREN LBRAKET RBRAKET
 %token RARROW DOT COMMA SEMISEMI
 %token ZERO SUCC
+%token EOL
 
 %token <int> INTV
 %token <Syntax.id> ID
@@ -17,10 +18,11 @@ open Syntax
 toplevel : Program { $1 }
 
 Program :
-  Stmt { $1 }
+  Stmt EOL { [$1] }
+| Stmt Program { $1::$2 }
 
 Stmt :
-  Expr SEMISEMI { $1 }
+  Expr SEMISEMI { Exp $1 }
 
 Expr :
   RExpr { $1 }

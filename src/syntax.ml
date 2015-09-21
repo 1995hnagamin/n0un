@@ -24,7 +24,10 @@ let rec string_of_exp = function
     g ^ "[" ^ String.concat "," fs ^ "]"
 | PRec(g, f) -> string_of_exp g ^ "->" ^ string_of_exp f
 
-type program = exp
+type stmt =
+  Exp of exp
+
+type program = stmt list
 ;;
 
 type ty =
