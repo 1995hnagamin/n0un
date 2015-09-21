@@ -16,3 +16,5 @@ let comp g f = Comp(g, [f])
 let app f x = App(f, [Int x])
 
 let apps f xs = App(f, List.map (fun x -> Int x) xs)
+
+let proj x y = Proj(x, y)

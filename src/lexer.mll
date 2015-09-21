@@ -2,6 +2,8 @@
 let reserverWords = [
   ("zero", Parser.ZERO);
   ("succ", Parser.SUCC);
+  ("let",  Parser.LET);
+  ("in",   Parser.IN);
 ]
 ;;
 
@@ -26,6 +28,7 @@ rule main = parse
 | "]"  { Parser.RBRAKET }
 | "->" { Parser.RARROW }
 | "."  { Parser.DOT }
+| "="  { Parser.EQ }
 | ";;" { Parser.SEMISEMI }
 | ","  { Parser.COMMA }
 | "@" ['0'-'9']+ "/" ['0'-'9']+
