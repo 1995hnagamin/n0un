@@ -3,8 +3,11 @@ LIB = n0unlib
 
 FILES[] =
 	syntax
+	util
 	parser
 	lexer
+	environment
+	typing
 	eval
 	main
 
