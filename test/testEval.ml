@@ -34,7 +34,7 @@ let eval_eql_tests =
     "let u = @4/4 in u(1,2,3,4)", Int 4,
       LetExp("u", proj 4 4, apps (Var "u") [1; 2; 3; 4]);
     "let add = succ.@3/3->@1/1 in let mul = add[@1/3,@3/3]->@2/2->zero in mul(6, 7)", Int 42,
-      LetExp("add", comp Succ (PRec(proj 3 3, proj 1 1)),
+      LetExp("add", PRec(comp Succ (proj 3 3), proj 1 1),
       LetExp("mul", 
         PRec(Comp(Var "add", [proj 1 3; proj 3 3]),
           PRec(proj 2 2, Zero)),
