@@ -28,7 +28,7 @@ let eval_eql_tests =
       App(Proj(3,3), [Int 1; Int 2; App(Succ, [Int 3])]);
     "(@1/2->zero)(43)", Int 42, app (PRec(Proj(1,2), Zero)) 43;
     "(succ.@3/3->@1/1)(10, 5)", Int 15,
-      app (PRec(comp Succ Proj(3,3), Proj(1,1))) 15;
+      apps (PRec(comp Succ (Proj(3,3)), Proj(1,1))) [10; 5];
   ]
 ;;
 
@@ -36,4 +36,4 @@ let eval_tests = prim_eql_tests @ eval_eql_tests
 
 let suite = "test eval" >::: eval_tests
 
-let _ = run_throwable_tests suite
+let _ = run_throwable_test suite
