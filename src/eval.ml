@@ -5,9 +5,9 @@ exception Runtime_error of string
 
 let rec apply_succ env = function
   Int n -> Int (n + 1)
-| Var x ->
-    let x = Environment.lookup x env in
-    apply_succ env x
+| Var id ->
+    let id = Environment.lookup id env in
+    apply_succ env id
 | _ -> raise (Runtime_error "Only integer succeeds")
 
 let rec apply env f xs = 
@@ -39,4 +39,5 @@ let rec eval env = function
     let v = eval env v in
     let env = Environment.extend x v env in
     eval env body
+| Var id -> eval env (Environment.lookup id env)
 | x -> x
