@@ -19,4 +19,14 @@ let rec rep x =
   rep (x + 1)
 ;;
 
-let _ = rep 0;;
+let exec_file filename =
+  let ic = open_in filename in
+  let program = Parser.toplevel Lexer.main (Lexing.from_channel ic) in
+  print_program program
+;;
+
+let _ =
+  if Array.length Sys.argv > 1
+  then exec_file Sys.argv.(1)
+  else rep 0
+;;
