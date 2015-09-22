@@ -9,6 +9,7 @@ FILES[] =
 	environment
 	typing
 	eval
+	exec
 	main
 
 OCamlGeneratedFiles(lexer.ml parser.mli parser.ml)

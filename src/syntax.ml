@@ -33,6 +33,7 @@ let rec string_of_exp = function
 
 type stmt =
   Exp of exp
+| LetDecl of id * exp
 
 type program = stmt list
 ;;

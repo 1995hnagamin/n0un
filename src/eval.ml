@@ -3,41 +3,46 @@ open Util
 
 exception Runtime_error of string
 
-let rec apply_succ env = function
-  Int n -> Int (n + 1)
-| Var id ->
-    let id = Environment.lookup id env in
-    apply_succ env id
-| _ -> raise (Runtime_error "Only integer succeeds")
+type expval =
+  IntV of int
+| FunV of exp * (expval Environment.t)
 
-let rec apply env f xs = 
-  match f with
-  Zero -> Int 0
-| Succ -> apply_succ env (List.hd xs)
-| Proj(n, _) -> List.nth xs (n - 1)
-| Comp(g, fs) ->
-    let xs = List.map (fun f -> apply env f xs) fs in
-    apply env g xs
-| PRec(g, f) -> apply_prec env g f (List.rev xs)
-| Var id ->
-    let f = Environment.lookup id env in
-    apply env f xs
-| _ -> raise (Runtime_error "Non-funtion object is applied")
+let string_of_expval = function
+  IntV n -> string_of_int n
+| FunV (_, _) -> "<fun>"
 
-and apply_prec env g f = function
-  (Int 0)::xs -> apply env f (List.rev xs)
-| (Int n)::xs ->
-    let y = Int (n - 1) in
-    let z = apply_prec env g f (y::xs) in
-    apply env g (List.rev (z::y::xs))
-| []  -> raise (Runtime_error "Arguments exhausted")
-| _   -> raise (Runtime_error "Wrong arguments")
+let fun_v f env = FunV(f, env)
+
+let rec apply f xs = match f, xs with
+| FunV (Zero, _), [] -> IntV 0
+| FunV (Succ, _), [IntV n] -> IntV (n + 1)
+| FunV (Proj(a, b), _), xs -> List.nth xs (b - a)
+| FunV (Comp(g, fs), env), xs ->
+    let xs = List.map (fun f -> apply (fun_v f env) xs) fs in
+    apply (fun_v g env) xs
+| FunV (PRec(h, g), env), (IntV 0)::xs -> apply (fun_v g env) xs
+| FunV (PRec(h, g), env), (IntV n)::xs ->
+    let y = IntV (n - 1) in
+    let z = apply f (y::xs) in
+    apply (fun_v h env) (z::y::xs)
+| FunV (Var id, env), xs ->
+    let f = (Environment.lookup id env) in
+    apply f xs
+| _, _ -> raise (Runtime_error "wrong application")
 
 let rec eval env = function
-  App(f, xs) -> apply env (eval env f) (List.map (eval env) xs)
-| LetExp(x, v, body) ->
+  Int n -> IntV n
+| Var id -> Environment.lookup id env
+| App (f, xs) ->
+    let f = eval env f
+    and xs = List.map (eval env) xs in
+    apply f (List.rev xs)
+| LetExp (x, v, body) ->
     let v = eval env v in
     let env = Environment.extend x v env in
     eval env body
-| Var id -> eval env (Environment.lookup id env)
-| x -> x
+| Zero -> FunV (Zero, env)
+| Succ -> FunV (Succ, env)
+| Proj(x, y)  -> FunV(Proj(x, y), env)
+| Comp(g, fs) -> FunV(Comp(g, fs), env)
+| PRec(g, f)  -> FunV(PRec(g, f), env)

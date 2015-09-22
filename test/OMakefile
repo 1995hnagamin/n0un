@@ -5,6 +5,7 @@ FILES[] =
 	testParser
 	testTyping
 	testEval
+	testExec
 
 USE_OCAMLFIND = true
 OCAMLPACKS[] =

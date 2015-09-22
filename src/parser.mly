@@ -24,6 +24,7 @@ Program :
 
 Stmt :
   Expr SEMISEMI { Exp $1 }
+| LetDecl SEMISEMI { $1 }
 
 Expr :
   RExpr { $1 }
@@ -64,3 +65,6 @@ Projection :
 
 LetExpr :
   LET ID EQ Expr IN Expr { LetExp($2, $4, $6) }
+
+LetDecl :
+  LET ID EQ Expr { LetDecl($2, $4) }

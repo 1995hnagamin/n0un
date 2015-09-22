@@ -4,9 +4,13 @@ open TestUtil
 open Syntax
 open Eval
 
+let exp_of_expval = function
+  IntV n -> Int n
+| FunV(f, _) -> f
+
 let eval_eql_test (title, result, expr) =
   title >:: 
-    (fun test_ctxt -> assert_equal result (eval Environment.empty expr))
+    (fun test_ctxt -> assert_equal result ((exp_of_expval << eval Environment.empty) expr))
 ;;
 
 let prim_eql_tests =
