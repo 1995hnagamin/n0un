@@ -3,12 +3,13 @@ open Util
 open TestUtil
 open Syntax
 open Exec
+open Eval
 
 let test_program (filename, expection) = filename >:: fun test_ctxt ->
   let output = ref [] in
-  let f id expr ty_e =
+  let f id expval ty_e =
     (match id with
-      "-" -> output := (expr, ty_e)::(!output)
+      "-" -> output := (expval, ty_e)::(!output)
     | _   -> ())
   in
   let ic = open_in filename in
@@ -18,14 +19,14 @@ let test_program (filename, expection) = filename >:: fun test_ctxt ->
 ;;
 
 let test1_expc = [
-  Int 0,  TyInt;
-  Int 41, TyInt;
-  Int 13, TyInt;
-  Int 42, TyInt;
-  Int 7,  TyInt;
-  Int 0,  TyInt;
-  Int 42, TyInt;
-  Int 42, TyInt;
+  IntV 0,  TyInt;
+  IntV 41, TyInt;
+  IntV 13, TyInt;
+  IntV 42, TyInt;
+  IntV 7,  TyInt;
+  IntV 0,  TyInt;
+  IntV 42, TyInt;
+  IntV 42, TyInt;
   ]
 ;;
 

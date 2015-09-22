@@ -6,7 +6,7 @@ let print_program env tyenv =
     (fun id expr ty_e ->
       print_string id;
       print_string " = ";
-      (print_string << string_of_exp) expr;
+      (print_string << Eval.string_of_expval) expr;
       print_string " : ";
       (print_string << string_of_ty) ty_e;
       print_newline ())
