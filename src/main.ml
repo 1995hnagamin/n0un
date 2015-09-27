@@ -28,8 +28,19 @@ let exec_file filename =
   print_program Environment.empty Environment.empty program
 ;;
 
+let print_int =
+  let f xs =
+    (print_string << string_of_int) (List.nth xs 0);
+    print_newline ();
+    0 in
+  Eval.ActV f
+;;
+
+let ienv = Environment.extend "print_int" print_int Environment.empty
+let ityenv = Environment.extend "print_int" (TyPFun 1) Environment.empty
+
 let _ =
   if Array.length Sys.argv > 1
   then exec_file Sys.argv.(1)
-  else repl Environment.empty Environment.empty
+  else repl ienv ityenv
 ;;
