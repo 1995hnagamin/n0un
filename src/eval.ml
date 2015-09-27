@@ -6,12 +6,19 @@ exception Runtime_error of string
 type expval =
   IntV of int
 | FunV of exp * (expval Environment.t)
+| ActV of (int list -> int)
 
 let string_of_expval = function
   IntV n -> string_of_int n
-| FunV (_, _) -> "<fun>"
+| _ -> "<fun>"
 
 let fun_v f env = FunV(f, env)
+
+let apply_action f xs =
+  let xs = List.map (fun x -> match x with
+      IntV n -> n
+    | _ -> raise (Runtime_error "wrong arguments")) xs in
+  IntV (f xs)
 
 let rec apply f xs = match f, xs with
 | FunV (Zero, _), [] -> IntV 0
@@ -28,6 +35,7 @@ let rec apply f xs = match f, xs with
 | FunV (Var id, env), xs ->
     let f = (Environment.lookup id env) in
     apply f xs
+| ActV f, xs -> apply_action f xs
 | _, _ -> raise (Runtime_error "wrong application")
 
 let rec eval env = function
@@ -46,3 +54,4 @@ let rec eval env = function
 | Proj(x, y)  -> FunV(Proj(x, y), env)
 | Comp(g, fs) -> FunV(Comp(g, fs), env)
 | PRec(g, f)  -> FunV(PRec(g, f), env)
+| Action(f, _) -> ActV f

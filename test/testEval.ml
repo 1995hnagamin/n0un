@@ -7,6 +7,7 @@ open Eval
 let exp_of_expval = function
   IntV n -> Int n
 | FunV(f, _) -> f
+| _ -> failwith "error" 
 
 let eval_eql_test (title, result, expr) =
   title >:: 
