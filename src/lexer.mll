@@ -1,12 +1,4 @@
 {
-let reserverWords = [
-  ("zero", Parser.ZERO);
-  ("succ", Parser.SUCC);
-  ("let",  Parser.LET);
-  ("in",   Parser.IN);
-]
-;;
-
 let proj_of_string str =
   Scanf.sscanf str "@%d/%d" (fun x y -> (x, y));;
 
@@ -34,7 +26,7 @@ rule main = parse
 | "@" ['0'-'9']+ "/" ['0'-'9']+
   { Parser.PROJECTOR (proj_of_string (Lexing.lexeme lexbuf)) }
 | ['a'-'z']['a'-'z' '0'-'9' '_']*
-  { let id = Lexing.lexeme lexbuf in maybe_assoc (Parser.ID id) id reserverWords }
+  { let id = Lexing.lexeme lexbuf in Parser.ID id }
 | ['A'-'Z']['A'-'Z' 'a'-'z' '0'-'9']*
   { let keyword = Lexing.lexeme lexbuf in Parser.KEYWORD keyword }
 | eof { Parser.EOL }
