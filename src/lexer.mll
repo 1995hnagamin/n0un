@@ -7,7 +7,12 @@ let maybe_assoc default key alist =
     List.assoc key alist
   with
     Not_found -> default
-;;
+
+let keywords = [
+  "Let", Parser.LET;
+  "In", Parser.IN;
+]
+
 }
 
 rule main = parse
@@ -28,5 +33,8 @@ rule main = parse
 | ['a'-'z']['a'-'z' '0'-'9' '_']*
   { let id = Lexing.lexeme lexbuf in Parser.ID id }
 | ['A'-'Z']['A'-'Z' 'a'-'z' '0'-'9']*
-  { let keyword = Lexing.lexeme lexbuf in Parser.KEYWORD keyword }
+  {
+    let keyword = Lexing.lexeme lexbuf in
+    List.assoc keyword keywords
+  }
 | eof { Parser.EOL }
