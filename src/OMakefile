@@ -9,6 +9,7 @@ FILES[] =
 	environment
 	typing
 	eval
+	language
 	exec
 	main
 
