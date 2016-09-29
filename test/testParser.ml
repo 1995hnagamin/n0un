@@ -6,7 +6,7 @@ open Syntax
 let parse str = Parser.toplevel Lexer.main (Lexing.from_string str)
 
 let parse_expr str =
-  let value = parse (str ^ ";;") in
+  let value = parse (str ^ ";") in
   match value with
     [Exp e] -> e
   | _ -> failwith "Not a expression"
