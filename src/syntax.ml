@@ -1,4 +1,5 @@
 type id = string
+type keyword = string
 
 type ty =
   TyInt

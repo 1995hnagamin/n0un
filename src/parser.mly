@@ -10,6 +10,7 @@ open Syntax
 
 %token <int> INTV
 %token <Syntax.id> ID
+%token <Syntax.keyword> KEYWORD
 %token <(int * int)> PROJECTOR
 
 %start toplevel

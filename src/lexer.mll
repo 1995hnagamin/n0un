@@ -35,4 +35,6 @@ rule main = parse
   { Parser.PROJECTOR (proj_of_string (Lexing.lexeme lexbuf)) }
 | ['a'-'z']['a'-'z' '0'-'9' '_']*
   { let id = Lexing.lexeme lexbuf in maybe_assoc (Parser.ID id) id reserverWords }
+| ['A'-'Z']['A'-'Z' 'a'-'z' '0'-'9']*
+  { let keyword = Lexing.lexeme lexbuf in Parser.KEYWORD keyword }
 | eof { Parser.EOL }
