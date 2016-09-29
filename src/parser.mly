@@ -3,7 +3,7 @@ open Syntax
 
 %}
 %token LPAREN RPAREN LBRAKET RBRAKET
-%token RARROW DOT EQ COMMA SEMISEMI
+%token RARROW DOT EQ COMMA SEMI
 %token ZERO SUCC
 %token LET IN
 %token EOL
@@ -23,8 +23,8 @@ Program :
 | Stmt Program { $1::$2 }
 
 Stmt :
-  Expr SEMISEMI { Exp $1 }
-| LetDecl SEMISEMI { $1 }
+  Expr SEMI { Exp $1 }
+| LetDecl SEMI { $1 }
 
 Expr :
   RExpr { $1 }

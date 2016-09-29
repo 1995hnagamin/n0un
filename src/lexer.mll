@@ -29,7 +29,7 @@ rule main = parse
 | "->" { Parser.RARROW }
 | "."  { Parser.DOT }
 | "="  { Parser.EQ }
-| ";;" { Parser.SEMISEMI }
+| ";" { Parser.SEMI }
 | ","  { Parser.COMMA }
 | "@" ['0'-'9']+ "/" ['0'-'9']+
   { Parser.PROJECTOR (proj_of_string (Lexing.lexeme lexbuf)) }
