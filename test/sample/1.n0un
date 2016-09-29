@@ -1,17 +1,17 @@
-let pred = @1/2 -> zero;
-pred(0);
-pred(42);
+Let pred = @1/2 -> zero;
+Print pred(0);
+Print pred(42);
 
-let add = succ.@3/3 -> @1/1;
-add(10, 3);
-add(0, 42);
+Let add = succ.@3/3 -> @1/1;
+Print add(10, 3);
+Print add(0, 42);
 
-let sub = pred.@3/3 -> @1/1;
-sub(10, 3);
-sub(10, 20);
+Let sub = pred.@3/3 -> @1/1;
+Print sub(10, 3);
+Print sub(10, 20);
 
-let mul = add[@1/3, @3/3] -> @2/2 -> zero;
-mul(6, 7);
+Let mul = add[@1/3, @3/3] -> @2/2 -> zero;
+Print mul(6, 7);
 
-let add = sub;
-mul(6, 7);
+Let add = sub;
+Print mul(6, 7);
