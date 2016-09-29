@@ -34,8 +34,8 @@ let parse_tests =
            [App (Zero, []);
             App (Succ, [Int 0]);
             App (Proj(1,2), [Int 2; Int 3])]);
-    "let x = 1 in x", LetExp("x", Int 1, Var "x");
-    "let f = succ in let x = succ(42) in f(x)",
+    "Let x = 1 In x", LetExp("x", Int 1, Var "x");
+    "Let f = succ In Let x = succ(42) In f(x)",
       LetExp("f", Succ,
       LetExp("x", app Succ 42,
       App(Var "f", [Var "x"])));
