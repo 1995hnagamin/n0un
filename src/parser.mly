@@ -4,7 +4,6 @@ open Syntax
 %}
 %token LPAREN RPAREN LBRAKET RBRAKET
 %token RARROW DOT EQ COMMA SEMI
-%token ZERO SUCC
 %token LET IN
 %token EOL
 
@@ -54,8 +53,6 @@ Composee :
 
 IExpr :
   INTV { Int $1 }
-| ZERO { Zero }
-| SUCC { Succ }
 | ID   { Var $1 }
 | Projection { $1 }
 | LPAREN Expr RPAREN { $2 }
