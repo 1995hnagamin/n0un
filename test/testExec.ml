@@ -14,7 +14,7 @@ let test_program (filename, expection) = filename >:: fun test_ctxt ->
   in
   let ic = open_in filename in
   let prog = Parser.toplevel Lexer.main (Lexing.from_channel ic) in
-  let _ = exec f Environment.empty Environment.empty prog in
+  let _ = exec f Language.standard_init_env Language.standard_init_tyenv prog in
   assert_equal (List.rev!output) expection
 ;;
 
