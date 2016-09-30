@@ -32,8 +32,8 @@ type id = string
 
 type ty =
   TyInt
-| TyPFun of int (* primitive recursive function N^k -> N *)
-| TyRFun of int (* recursive function N^k -> N *)
+| TyPFun of Arity.t (* primitive recursive function N^k -> N *)
+| TyRFun of Arity.t (* recursive function N^k -> N *)
 
 type exp =
   Int of int
@@ -42,7 +42,7 @@ type exp =
 | LetExp of id * exp * exp
 | Zero
 | Succ
-| Proj of (int * int)
+| Proj of (int * Arity.t)
 | Comp of exp * (exp list)
 | PRec of exp * exp
 
@@ -59,7 +59,7 @@ let rec string_of_exp = function
     "let " ^ x ^ "=" ^ v ^ " in " ^ body
 | Zero -> "zero"
 | Succ -> "succ"
-| Proj(x, y) -> "@" ^ string_of_int x ^ "/" ^ string_of_int y
+| Proj(x, y) -> "@" ^ string_of_int x ^ "/" ^ Arity.to_string y
 | Comp(g, fs) ->
     let g = string_of_exp g
     and fs = List.map string_of_exp fs in
@@ -74,5 +74,5 @@ type program = stmt list
 
 let string_of_ty = function
   TyInt -> "Int"
-| TyPFun k -> "N^" ^ string_of_int k ^ " -> N, primitive recursive"
-| TyRFun k -> "N^" ^ string_of_int k ^ " -> N, recursive"
+| TyPFun k -> "N^" ^ Arity.to_string k ^ " -> N, primitive recursive"
+| TyRFun k -> "N^" ^ Arity.to_string k ^ " -> N, recursive"

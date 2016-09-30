@@ -1,6 +1,8 @@
 {
+open Syntax
+
 let proj_of_string str =
-  Scanf.sscanf str "@%d/%d" (fun x y -> (x, y))
+  Scanf.sscanf str "@%d/%d" (fun x y -> (x, Arity.exact y))
 
 let maybe_assoc default key alist =
   try 

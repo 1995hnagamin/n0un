@@ -9,7 +9,7 @@ open Syntax
 
 %token <int> INTV
 %token <Syntax.id> ID
-%token <(int * int)> PROJECTOR
+%token <(int * Syntax.Arity.t)> PROJECTOR
 
 %start toplevel
 %type <Syntax.program> toplevel

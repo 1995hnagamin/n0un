@@ -23,14 +23,23 @@ let rec is_primitive env = function
 
 let arity_comp t_g t_fs =
   let k = arity t_g in
-  if not ( is_same_as arity t_fs )
-  then raise ( Typing_error "Arities of functions don't match" )
-  else
-    if not ( k = List.length t_fs )
+  let af = List.fold_left Arity.intersect (Arity.at_least 0) (List.map arity t_fs) in
+  match af with
+    Arity.Null -> raise ( Typing_error "Arities of functions don't match" )
+  | _ ->
+    if not (Arity.is_applicable (List.length t_fs) k)
     then raise ( Typing_error "arity doesn't match" )
     else k
 
 let ty_fun env f k = if is_primitive env f then TyPFun k else TyRFun k
+
+let ty_prec x y = match(x, y) with
+  (Arity.Null, _) -> Arity.Null
+| (_, Arity.Null) -> Arity.Null
+| (Arity.Range(x, y), Arity.Range(x', y')) ->
+    let m = Somega.max x (Somega.add 2 x')
+    and n = Somega.min y (Somega.add 2 y') in
+    Arity.Range(Somega.add 1 m, Somega.add 1 n)
 
 let rec eval_ty env = function
   Int _ -> TyInt
@@ -40,7 +49,7 @@ let rec eval_ty env = function
     (match () with
       _ when not (List.for_all (fun x -> eval_ty env x = TyInt) xs) ->
         raise (Typing_error "Non-integer object is applied")
-    | _ when k != List.length xs ->
+    | _ when Arity.is_applicable (List.length xs) k ->
         raise (Typing_error "Arity doesn't match")
     | _ -> TyInt)
 | LetExp (x, v, body) ->
@@ -53,14 +62,17 @@ let rec eval_ty env = function
 | Comp(g, fs) ->
     let t_g  = eval_ty env g
     and t_fs = List.map (eval_ty env) fs in
-    (match () with
-      _ when arity t_g != List.length t_fs -> raise (Typing_error "Arity doesn't match")
-    | _ when is_different arity t_fs -> raise (Typing_error "Arities of functions don't match")
+    let af = List.fold_left Arity.intersect (Arity.at_least 0) (List.map arity t_fs) in
+    (match af with
+      Arity.Null -> raise (Typing_error "Arities of functions don't match")
+    | _ when not (Arity.is_applicable (List.length t_fs) (arity t_g))
+      -> raise (Typing_error "Arity doesn't match")
     | _ when List.length t_fs = 0 -> t_g
     | _ -> ty_fun env (Comp(g, fs)) ((arity << List.hd) t_fs))
 | PRec(g, f) ->
     let y = arity (eval_ty env g)
     and x = arity (eval_ty env f) in
-    (match () with
-      _ when x + 2 != y -> raise (Typing_error "Arity doesn't match")
-    | _ -> ty_fun env (PRec (g, f)) (x + 1))
+    let ar = ty_prec y x in
+    match ar with
+      Arity.Null -> raise (Typing_error "Arity doesn't match")
+    | _ -> ty_fun env (PRec (g, f)) ar
