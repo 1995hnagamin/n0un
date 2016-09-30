@@ -1,5 +1,7 @@
 module Arity : sig
-  type t = (Somega.t * Somega.t)
+  type t =
+    Range of Somega.t * Somega.t
+  | Null
 
   val exact : int -> t
   val at_least : int -> t
