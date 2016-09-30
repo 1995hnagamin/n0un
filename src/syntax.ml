@@ -15,7 +15,6 @@ type exp =
 | Proj of (int * int)
 | Comp of exp * (exp list)
 | PRec of exp * exp
-| Action of (int list -> int) * ty
 
 let rec string_of_exp = function
   Int n -> string_of_int n
@@ -36,7 +35,6 @@ let rec string_of_exp = function
     and fs = List.map string_of_exp fs in
     g ^ "[" ^ String.concat "," fs ^ "]"
 | PRec(g, f) -> string_of_exp g ^ "->" ^ string_of_exp f
-| Action _ -> "<built-in>"
 
 type stmt =
   PrintStmt of exp

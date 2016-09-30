@@ -15,7 +15,6 @@ type exp =
 | Proj of (int * int)
 | Comp of exp * (exp list)
 | PRec of exp * exp
-| Action of (int list -> int) * ty
 
 type stmt =
   PrintStmt of exp
