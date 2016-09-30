@@ -13,3 +13,5 @@ val app : exp -> int -> exp
 val apps : exp -> int list -> exp
 
 val proj : int -> int -> exp
+
+val typfun : int -> ty
