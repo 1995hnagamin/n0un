@@ -1,3 +1,19 @@
+module Arity : sig
+  type t =
+    ArNum of int
+  | ArInfty
+
+  (* [a, b) *)
+  type range = (t * t)
+
+  val exact : int -> range
+  val at_least : int -> range
+  val intersect : range -> range -> range
+  val min : t -> t -> t
+  val max : t -> t -> t
+  val is_applicable : int -> range -> bool
+end
+
 type id = string
 
 type ty =

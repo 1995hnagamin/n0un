@@ -1,3 +1,39 @@
+module Arity = struct
+  type t =
+    ArNum of int
+  | ArInfty
+
+  (* [a, b) *)
+  type range = (t * t)
+
+  let exact n =
+    (ArNum n, ArNum (n + 1))
+
+  let at_least n =
+    (ArNum n, ArInfty)
+
+  let less a b = match (a, b) with
+    (ArNum x, ArNum y) -> x < y
+  | (ArNum _, ArInfty) -> true
+  | (ArInfty, _) -> false
+
+  let leq a b =
+    not (less b a)
+
+  let min a b =
+    if less a b then a else b
+
+  let max a b =
+    if less a b then b else a
+
+  let is_applicable n (a, b) =
+    let n' = ArNum n in
+    (leq a n') && (less n' b)
+
+  let intersect (x, y) (x', y') =
+    (max x x', min y y')
+end
+
 type id = string
 
 type ty =
