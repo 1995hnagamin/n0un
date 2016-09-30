@@ -9,7 +9,7 @@ let test_program (filename, expection) = filename >:: fun test_ctxt ->
   let output = ref [] in
   let f prog =
     (match prog with
-      ProgPrint(expval, ty_e) -> output := (expval, ty_e)::(!output)
+      ActPrint(expval, ty_e) -> output := (expval, ty_e)::(!output)
     | _   -> ())
   in
   let ic = open_in filename in

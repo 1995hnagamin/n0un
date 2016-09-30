@@ -2,14 +2,14 @@ open Syntax
 open Util
 
 let output_line = function
-  Exec.ProgBind(id, expval, ty) ->
+  Exec.ActBind(id, expval, ty) ->
     print_string id;
     print_string " = ";
     (print_string << Eval.string_of_expval) expval;
     print_string " : ";
     (print_string << string_of_ty) ty;
     print_newline ()
-| Exec.ProgPrint(expval, ty) ->
+| Exec.ActPrint(expval, ty) ->
     (print_string << Eval.string_of_expval) expval;
     print_newline ()
 
