@@ -1,10 +1,10 @@
 module Arity = struct
-  type t =
+  type ar =
     ArNum of int
   | ArInfty
 
   (* [a, b) *)
-  type range = (t * t)
+  type t = (ar * ar)
 
   let exact n =
     (ArNum n, ArNum (n + 1))
