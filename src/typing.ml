@@ -47,8 +47,8 @@ let rec eval_ty env = function
     let ty_v = eval_ty env v in
     let env' = Environment.extend x ty_v env in
     eval_ty env' body
-| Zero -> TyPFun 0
-| Succ -> TyPFun 1
+| Zero -> typfun 0
+| Succ -> typfun 1
 | Proj(x, y) -> TyPFun y
 | Comp(g, fs) ->
     let t_g  = eval_ty env g
