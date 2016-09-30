@@ -19,11 +19,11 @@ let ty_eql_tests =
     "@1/3[@1/2, @2/2, @1/2]: N^2->N(p)",
       Comp(Proj(1,3), [Proj(1,2);Proj(2,2);Proj(1,2)]), TyPFun 2;
     "@1/2->zero: N->N(p)", PRec(Proj(1,2), Zero), TyPFun 1;
-    "let z = 42 in succ(z)",
+    "Let z = 42 In succ(z)",
       LetExp("z", Int 0, App(Succ, [Var "z"])), TyInt;
-    "let f = succ in @2/2[@1/1, f]",
+    "Let f = succ In @2/2[@1/1, f]",
       LetExp("f", Succ, Comp(Proj(2,2), [Proj(1,1); Var "f"])), TyPFun 1;
-    "let add = succ.@3/3->@1/1 in add[@1/3, @3/3] -> @2/2 -> zero",
+    "Let add = succ.@3/3->@1/1 In add[@1/3, @3/3] -> @2/2 -> zero",
       LetExp(
         "add",
         PRec(comp Succ (proj 1 3), proj 1 1),
@@ -60,8 +60,8 @@ let wrong_apl_tests =
     "(succ.zero)(1)", app (comp Succ Zero) 1;
     "@1/2[@1/3, @2/3](1)",
       app (Comp (proj 1 2, [proj 1 3; proj 2 3])) 1;
-    "let s = succ in s()", LetExp("s", Succ, App(Var "s", []));
-    "let u = @1/3 in u(1,2)", LetExp("u", proj 1 3, apps (Var "u") [1; 2]);
+    "Let s = succ In s()", LetExp("s", Succ, App(Var "s", []));
+    "Let u = @1/3 In u(1,2)", LetExp("u", proj 1 3, apps (Var "u") [1; 2]);
   ]
 ;;
 

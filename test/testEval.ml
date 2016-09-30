@@ -7,7 +7,6 @@ open Eval
 let exp_of_expval = function
   IntV n -> Int n
 | FunV(f, _) -> f
-| _ -> failwith "error" 
 
 let eval_eql_test (title, result, expr) =
   title >:: 
@@ -34,12 +33,12 @@ let eval_eql_tests =
     "(@1/2->zero)(43)", Int 42, app (PRec(Proj(1,2), Zero)) 43;
     "(succ.@3/3->@1/1)(10, 5)", Int 15,
       apps (PRec(comp Succ (Proj(3,3)), Proj(1,1))) [10; 5];
-    "let x = 10 in x", Int 10, LetExp("x", Int 10, Var "x");
-    "let fo_tw = 42 in succ(fo_tw)", Int 43,
+    "Let x = 10 In x", Int 10, LetExp("x", Int 10, Var "x");
+    "Let fo_tw = 42 In succ(fo_tw)", Int 43,
       LetExp("fo_tw", Int 42, App(Succ, [Var "fo_tw"]));
-    "let u = @4/4 in u(1,2,3,4)", Int 4,
+    "Let u = @4/4 In u(1,2,3,4)", Int 4,
       LetExp("u", proj 4 4, apps (Var "u") [1; 2; 3; 4]);
-    "let add = succ.@3/3->@1/1 in let mul = add[@1/3,@3/3]->@2/2->zero in mul(6, 7)", Int 42,
+    "Let add = succ.@3/3->@1/1 In Let mul = add[@1/3,@3/3]->@2/2->zero In mul(6, 7)", Int 42,
       LetExp("add", PRec(comp Succ (proj 3 3), proj 1 1),
       LetExp("mul", 
         PRec(Comp(Var "add", [proj 1 3; proj 3 3]),

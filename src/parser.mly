@@ -3,9 +3,8 @@ open Syntax
 
 %}
 %token LPAREN RPAREN LBRAKET RBRAKET
-%token RARROW DOT EQ COMMA SEMISEMI
-%token ZERO SUCC
-%token LET IN
+%token RARROW DOT EQ COMMA SEMI
+%token LET IN PRINT
 %token EOL
 
 %token <int> INTV
@@ -23,8 +22,8 @@ Program :
 | Stmt Program { $1::$2 }
 
 Stmt :
-  Expr SEMISEMI { Exp $1 }
-| LetDecl SEMISEMI { $1 }
+  LetDecl SEMI { $1 }
+| PrintStmt SEMI { $1 }
 
 Expr :
   RExpr { $1 }
@@ -54,8 +53,6 @@ Composee :
 
 IExpr :
   INTV { Int $1 }
-| ZERO { Zero }
-| SUCC { Succ }
 | ID   { Var $1 }
 | Projection { $1 }
 | LPAREN Expr RPAREN { $2 }
@@ -68,3 +65,6 @@ LetExpr :
 
 LetDecl :
   LET ID EQ Expr { LetDecl($2, $4) }
+
+PrintStmt :
+  PRINT Expr { PrintStmt($2) }
