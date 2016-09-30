@@ -7,6 +7,7 @@ module Arity : sig
   val at_least : int -> t
   val intersect : t -> t -> t
   val is_applicable : int -> t -> bool
+  val to_string : t -> string
 end
 
 type id = string

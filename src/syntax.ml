@@ -21,6 +21,11 @@ module Arity = struct
       let (m, n) = (max x x', min y y') in
       if Somega.less m n then Range(m, n) else Null
   | _ -> Null
+
+  let to_string = function
+    Range (x, y) ->
+      "[" ^ (Somega.to_string x) ^ "," ^ (Somega.to_string y) ^ ")"
+  | Null -> "()"
 end
 
 type id = string
