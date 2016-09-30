@@ -7,9 +7,9 @@ open Eval
 
 let test_program (filename, expection) = filename >:: fun test_ctxt ->
   let output = ref [] in
-  let f id expval ty_e =
-    (match id with
-      "-" -> output := (expval, ty_e)::(!output)
+  let f prog =
+    (match prog with
+      ProgPrint(expval, ty_e) -> output := (expval, ty_e)::(!output)
     | _   -> ())
   in
   let ic = open_in filename in
