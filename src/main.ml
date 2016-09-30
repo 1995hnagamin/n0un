@@ -1,17 +1,19 @@
 open Syntax
 open Util
 
-let print_program env tyenv =
-  Exec.exec
-    (fun id expr ty_e ->
-      print_string id;
-      print_string " = ";
-      (print_string << Eval.string_of_expval) expr;
-      print_string " : ";
-      (print_string << string_of_ty) ty_e;
-      print_newline ())
-    env tyenv
-;;
+let output_line = function
+  Exec.ProgBind(id, expval, ty) ->
+    print_string id;
+    print_string " = ";
+    (print_string << Eval.string_of_expval) expval;
+    print_string " : ";
+    (print_string << string_of_ty) ty;
+    print_newline ()
+| Exec.ProgPrint(expval, ty) ->
+    (print_string << Eval.string_of_expval) expval;
+    print_newline ()
+
+let print_program env tyenv = Exec.exec output_line env tyenv
 
 let rec repl env tyenv =
   print_string "# ";

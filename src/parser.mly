@@ -4,7 +4,7 @@ open Syntax
 %}
 %token LPAREN RPAREN LBRAKET RBRAKET
 %token RARROW DOT EQ COMMA SEMI
-%token LET IN
+%token LET IN PRINT
 %token EOL
 
 %token <int> INTV
@@ -22,8 +22,8 @@ Program :
 | Stmt Program { $1::$2 }
 
 Stmt :
-  Expr SEMI { Exp $1 }
-| LetDecl SEMI { $1 }
+  LetDecl SEMI { $1 }
+| PrintStmt SEMI { $1 }
 
 Expr :
   RExpr { $1 }
@@ -65,3 +65,6 @@ LetExpr :
 
 LetDecl :
   LET ID EQ Expr { LetDecl($2, $4) }
+
+PrintStmt :
+  PRINT Expr { PrintStmt($2) }

@@ -11,6 +11,7 @@ let maybe_assoc default key alist =
 let keywords = [
   "Let", Parser.LET;
   "In", Parser.IN;
+  "Print", Parser.PRINT;
 ]
 
 }

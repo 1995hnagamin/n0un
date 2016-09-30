@@ -39,7 +39,7 @@ let rec string_of_exp = function
 | Action _ -> "<built-in>"
 
 type stmt =
-  Exp of exp
+  PrintStmt of exp
 | LetDecl of id * exp
 
 type program = stmt list
