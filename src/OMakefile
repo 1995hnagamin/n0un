@@ -2,6 +2,7 @@ PROGRAM = n0un
 LIB = n0unlib
 
 FILES[] =
+	somega
 	syntax
 	util
 	parser

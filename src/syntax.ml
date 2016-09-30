@@ -1,34 +1,16 @@
 module Arity = struct
-  type ar =
-    ArNum of int
-  | ArInfty
-
   (* [a, b) *)
-  type t = (ar * ar)
+  type t = (Somega.t * Somega.t)
 
   let exact n =
-    (ArNum n, ArNum (n + 1))
+    (Somega.Num n, Somega.Num (n + 1))
 
   let at_least n =
-    (ArNum n, ArInfty)
-
-  let less a b = match (a, b) with
-    (ArNum x, ArNum y) -> x < y
-  | (ArNum _, ArInfty) -> true
-  | (ArInfty, _) -> false
-
-  let leq a b =
-    not (less b a)
-
-  let min a b =
-    if less a b then a else b
-
-  let max a b =
-    if less a b then b else a
+    (Somega.Num n, Somega.Infty)
 
   let is_applicable n (a, b) =
-    let n' = ArNum n in
-    (leq a n') && (less n' b)
+    let n' = Somega.Num n in
+    (Somega.le a n') && (Somega.less n' b)
 
   let intersect (x, y) (x', y') =
     (max x x', min y y')
