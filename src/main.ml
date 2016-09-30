@@ -26,7 +26,12 @@ let rec repl env tyenv =
 let exec_file filename =
   let ic = open_in filename in
   let program = Parser.toplevel Lexer.main (Lexing.from_channel ic) in
-  print_program Environment.empty Environment.empty program
+  let f x = (match x with
+      Exec.ActPrint(expval, _) ->
+        (print_string << Eval.string_of_expval) expval;
+        print_newline ()
+    | _ -> ()) in
+  Exec.exec f Language.standard_init_env Language.standard_init_tyenv program
 
 let _ =
   if Array.length Sys.argv > 1
