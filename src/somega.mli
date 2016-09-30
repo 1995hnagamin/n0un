@@ -2,6 +2,7 @@ type t =
   Num of int
 | Infty
 
+val eq : t -> t -> bool
 val ge : t -> t -> bool
 val le : t -> t -> bool
 val less : t -> t -> bool

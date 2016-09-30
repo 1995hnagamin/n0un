@@ -2,6 +2,11 @@ type t =
   Num of int
 | Infty
 
+let eq x y = match (x, y) with
+  (Num x, Num y) -> x = y
+| (Infty, Infty) -> true
+| _ -> false
+
 let ge x y = match (x, y) with
   (Num x, Num y) -> x >= y
 | (Num _, Infty) -> false
