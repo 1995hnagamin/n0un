@@ -1,5 +1,9 @@
 open Syntax
 
+type program =
+  ProgBind of (id * Eval.expval * ty)
+| ProgPrint of (Eval.expval * ty)
+
 let rec exec f env tyenv = function
   [] -> (env, tyenv)
 | (Exp expr)::prog ->
