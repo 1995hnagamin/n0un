@@ -8,7 +8,9 @@ script:
   - opam init
   - opam install ounit omake
   - export PATH=$HOME/.opam/system/bin:$PATH
+  - omake
   - omake test
+  - sh test/executable/test.sh
 env:
   - OCAML_VERSION=4.01
 os:
