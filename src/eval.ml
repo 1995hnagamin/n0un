@@ -22,7 +22,7 @@ let apply_action f xs =
 let rec apply f xs = match f, xs with
 | FunV (Zero, _), [] -> IntV 0
 | FunV (Succ, _), [IntV n] -> IntV (n + 1)
-| FunV (Proj(a, b), _), xs -> List.nth xs (b - a)
+| FunV (Proj(a, b), _), xs -> List.nth xs ((List.length xs) - a)
 | FunV (Comp(g, fs), env), xs ->
     let xs = List.map (fun f -> apply (fun_v f env) xs) fs in
     apply (fun_v g env) xs
