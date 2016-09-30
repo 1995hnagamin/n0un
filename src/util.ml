@@ -5,7 +5,6 @@ let is_same_as f = function
 | x::xs ->
     let a = f x in
     List.for_all (fun x -> f x = a) xs
-;;
 
 let is_different f xs = not (is_same_as f xs)
 

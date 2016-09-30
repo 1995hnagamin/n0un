@@ -43,7 +43,6 @@ type stmt =
 | LetDecl of id * exp
 
 type program = stmt list
-;;
 
 let string_of_ty = function
   TyInt -> "Int"

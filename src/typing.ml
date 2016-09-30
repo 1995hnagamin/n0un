@@ -65,4 +65,3 @@ let rec eval_ty env = function
       _ when x + 2 != y -> raise (Typing_error "Arity doesn't match")
     | _ -> ty_fun env (PRec (g, f)) (x + 1))
 | Action (_, t) -> t
-;;
