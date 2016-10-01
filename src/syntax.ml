@@ -1,31 +1,16 @@
 module Arity = struct
-  (* [a, b) *)
-  type t =
-    Range of Somega.t * Somega.t
-  | Null
-
-  let exact n =
-    Range(Somega.Num n, Somega.Num (n + 1))
-
-  let at_least n =
-    Range(Somega.Num n, Somega.Infty)
+  type t = Range.t
 
   let is_applicable n = function
-    Range (a, b) ->
+    Range.Range (a, b) ->
       let n' = Somega.Num n in
       (Somega.le a n') && (Somega.less n' b)
-  | Null -> false
+  | Range.Void -> false
 
-  let intersect x y = match (x, y) with
-    (Range(x, y), Range(x', y')) ->
-      let (m, n) = (max x x', min y y') in
-      if Somega.less m n then Range(m, n) else Null
-  | _ -> Null
-
-  let to_string = function
-    Range (x, y) ->
-      "[" ^ (Somega.to_string x) ^ "," ^ (Somega.to_string y) ^ ")"
-  | Null -> "()"
+  let exact = Range.exact
+  let at_least = Range.at_least
+  let intersect = Range.intersect
+  let to_string = Range.to_string
 end
 
 type id = string

@@ -25,7 +25,7 @@ let arity_comp t_g t_fs =
   let k = arity t_g in
   let af = List.fold_left Arity.intersect (Arity.at_least 0) (List.map arity t_fs) in
   match af with
-    Arity.Null -> raise ( Typing_error "Arities of functions don't match" )
+    Range.Void -> raise ( Typing_error "Arities of functions don't match" )
   | _ ->
     if not (Arity.is_applicable (List.length t_fs) k)
     then raise ( Typing_error "arity doesn't match" )
@@ -34,12 +34,12 @@ let arity_comp t_g t_fs =
 let ty_fun env f k = if is_primitive env f then TyPFun k else TyRFun k
 
 let ty_prec x y = match(x, y) with
-  (Arity.Null, _) -> Arity.Null
-| (_, Arity.Null) -> Arity.Null
-| (Arity.Range(x, y), Arity.Range(x', y')) ->
+  (Range.Void, _) -> Range.Void
+| (_, Range.Void) -> Range.Void
+| (Range.Range(x, y), Range.Range(x', y')) ->
     let m = Somega.max x (Somega.add 2 x')
     and n = Somega.min y (Somega.add 2 y') in
-    Arity.Range(Somega.add 1 m, Somega.add 1 n)
+    Range.Range(Somega.add 1 m, Somega.add 1 n)
 
 let rec eval_ty env = function
   Int _ -> TyInt
@@ -64,7 +64,7 @@ let rec eval_ty env = function
     and t_fs = List.map (eval_ty env) fs in
     let af = List.fold_left Arity.intersect (Arity.at_least 0) (List.map arity t_fs) in
     (match af with
-      Arity.Null -> raise (Typing_error "Arities of functions don't match")
+      Range.Void -> raise (Typing_error "Arities of functions don't match")
     | _ when not (Arity.is_applicable (List.length t_fs) (arity t_g))
       -> raise (Typing_error "Arity doesn't match")
     | _ when List.length t_fs = 0 -> t_g
@@ -74,5 +74,5 @@ let rec eval_ty env = function
     and x = arity (eval_ty env f) in
     let ar = ty_prec y x in
     match ar with
-      Arity.Null -> raise (Typing_error "Arity doesn't match")
+      Range.Void -> raise (Typing_error "Arity doesn't match")
     | _ -> ty_fun env (PRec (g, f)) ar

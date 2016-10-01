@@ -3,6 +3,7 @@ LIB = n0unlib
 
 FILES[] =
 	somega
+	range
 	syntax
 	util
 	parser
