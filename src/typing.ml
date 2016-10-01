@@ -33,13 +33,17 @@ let arity_comp t_g t_fs =
 
 let ty_fun env f k = if is_primitive env f then TyPFun k else TyRFun k
 
-let ty_prec x y = match(x, y) with
+let ar_prec x y = match(x, y) with
   (Range.Void, _) -> Range.Void
 | (_, Range.Void) -> Range.Void
 | (Range.Range(x, y), Range.Range(x', y')) ->
-    let m = Somega.max x (Somega.add 2 x')
-    and n = Somega.min y (Somega.add 2 y') in
-    Range.Range(Somega.add 1 m, Somega.add 1 n)
+    let rec_range  = Range.range (Somega.max x (Somega.add 2 x')) (Somega.min y (Somega.add 2 y')) in
+    let base_range = Range.range (Somega.max x' (Somega.sub 2 x)) (Somega.min y' (Somega.sub 2 y)) in
+    match (rec_range, base_range) with
+      (Range.Void, _) -> Range.Void
+    | (_, Range.Void) -> Range.Void
+    | (_, Range.Range(m, n)) ->
+      Range.range (Somega.add 1 m) (Somega.add 1 n)
 
 let rec eval_ty env = function
   Int _ -> TyInt
@@ -72,7 +76,7 @@ let rec eval_ty env = function
 | PRec(g, f) ->
     let y = arity (eval_ty env g)
     and x = arity (eval_ty env f) in
-    let ar = ty_prec y x in
+    let ar = ar_prec y x in
     match ar with
       Range.Void -> raise (Typing_error "Arity doesn't match")
     | _ -> ty_fun env (PRec (g, f)) ar
