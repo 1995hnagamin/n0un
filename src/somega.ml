@@ -26,7 +26,7 @@ let add i = function
 | Infty -> Infty
 
 let sub i = function
-  Num n -> Num (min 0 (n - i))
+  Num n -> Num (max 0 (n - i))
 | Infty -> Infty
 
 let min x y =
