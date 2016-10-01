@@ -2,6 +2,8 @@ type t =
   Range of Somega.t * Somega.t
 | Void
 
+val range : Somega.t -> Somega.t -> t
+
 val exact : int -> t
 
 val at_least : int -> t

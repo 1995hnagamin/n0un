@@ -2,6 +2,11 @@ type t =
   Range of Somega.t * Somega.t
 | Void
 
+let range x y =
+  if Somega.less x y
+  then Range(x, y)
+  else Void
+
 let exact n =
   Range(Somega.Num n, Somega.Num(n + 1))
 
