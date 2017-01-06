@@ -53,7 +53,7 @@ let rec eval_ty env = function
     (match () with
       _ when not (List.for_all (fun x -> eval_ty env x = TyInt) xs) ->
         raise (Typing_error "Non-integer object is applied")
-    | _ when Arity.is_applicable (List.length xs) k ->
+    | _ when not (Arity.is_applicable (List.length xs) k) ->
         raise (Typing_error "Arity doesn't match")
     | _ -> TyInt)
 | LetExp (x, v, body) ->
