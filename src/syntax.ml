@@ -1,11 +1,8 @@
 module Arity = struct
   type t = Range.t
 
-  let is_applicable n = function
-    Range.Range (a, b) ->
-      let n' = Somega.Num n in
-      (Somega.le a n') && (Somega.less n' b)
-  | Range.Void -> false
+  let is_applicable n arity =
+    Range.inner n arity
 
   let exact = Range.exact
   let at_least = Range.at_least
