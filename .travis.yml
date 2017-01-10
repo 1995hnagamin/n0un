@@ -3,7 +3,6 @@ sudo: required
 install: wget https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.travis-opam.sh
 script:
   - bash -ex .travis-opam.sh
-  - opam init
   - opam install ounit omake
   - export PATH=$HOME/.opam/system/bin:$PATH
   - omake test
