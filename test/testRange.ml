@@ -33,8 +33,25 @@ let unmembership_tests =
       0, Range.at_least 20;
     ]
 
+let intersect_tests =
+  List.map
+    (fun (a, b, result) ->
+      (Printf.sprintf "%s /\ %s = %s"
+          (Range.to_string a) (Range.to_string b) (Range.to_string result)) >::
+        (fun test_ctxt -> assert_equal (Range.intersect a b) result))
+    [
+      Range.at_least 0, Range.at_least 0, Range.at_least 0;
+      Range.exact 0, Range.exact 0, Range.exact 0;
+
+      Range.at_least 10, Range.at_least 20, Range.at_least 20;
+      Range.exact 10, Range.at_least 1, Range.exact 10;
+      Range.exact 2, Range.exact 3, Range.Void;
+      Range.at_least 20, Range.exact 4, Range.Void
+    ]
+
 let range_tests =
-    membership_tests
+    intersect_tests
+  @ membership_tests
   @ unmembership_tests
 
 let suite = "test range" >::: range_tests
