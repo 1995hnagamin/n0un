@@ -33,7 +33,9 @@ let unmembership_tests =
       0, Range.at_least 20;
     ]
 
-let range_tests = membership_tests @ unmembership_tests
+let range_tests =
+    membership_tests
+  @ unmembership_tests
 
 let suite = "test range" >::: range_tests
 
