@@ -15,9 +15,6 @@ let parse_result_test program expr =
   ("test " ^ program) >:: 
     (fun test_ctxt -> assert_equal (parse_expr program) expr)
 
-let proj_variadic x =
-  Proj(x, Arity.at_least x)
-
 let parse_tests =
   List.map (fun (x, y) -> parse_result_test x y) [
     "10", Int 10;

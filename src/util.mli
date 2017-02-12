@@ -14,4 +14,6 @@ val apps : exp -> int list -> exp
 
 val proj : int -> int -> exp
 
+val proj_variadic : int -> exp
+
 val typfun : int -> ty
