@@ -15,18 +15,24 @@ let parse_result_test program expr =
   ("test " ^ program) >:: 
     (fun test_ctxt -> assert_equal (parse_expr program) expr)
 
+let proj_variadic x =
+  Proj(x, Arity.at_least x)
+
 let parse_tests =
   List.map (fun (x, y) -> parse_result_test x y) [
     "10", Int 10;
     "zero", Var "zero";
     "succ", Var "succ";
     "@1/10", proj 1 10;
+    "@1", proj_variadic 1;
+    "@20", proj_variadic 20;
     
     "succ[zero]", Comp((Var "succ"), [(Var "zero")]);
     "@1/4[@1/3, @2/3, @3/3, @1/3]", 
       Comp(proj 1 4, [proj 1 3; proj 2 3; proj 3 3; proj 1 3]);
     "succ.zero", Comp((Var "succ"), [(Var "zero")]);
     "@1/2 -> zero", PRec(proj 1 2, (Var "zero"));
+    "@1 -> zero", PRec(proj_variadic 1, (Var "zero"));
     "zero()", App((Var "zero"), []);
     "succ(0)", App((Var "succ"), [Int 0]);
     "@1/3(zero(), succ(0), @1/2(2, 3))",
