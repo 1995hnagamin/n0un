@@ -18,3 +18,7 @@ let run_throwable_suites suites =
     let _ = run_throwable_test suite in ()
   in
   List.iter f suites
+
+let run_throwable_testslist testslist =
+  let suites = List.map (fun (title, tests) -> title >::: tests) testslist in
+  run_throwable_suites suites
