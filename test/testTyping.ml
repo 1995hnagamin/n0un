@@ -65,10 +65,10 @@ let wrong_apl_tests =
   ]
 ;;
 
-let typing_tests =
-  ty_eql_tests @ untyped_expr_tests
-;;
+let typing_testslist = [
+  "typing tests (normal)", ty_eql_tests;
+  "typing tests (erroneous)", untyped_expr_tests;
+]
 
-let suite = "test typing" >::: typing_tests
-
-let _ = run_throwable_test suite
+let _ =
+  run_throwable_testslist typing_testslist

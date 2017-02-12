@@ -42,8 +42,9 @@ let consistency_tests =
             ((Somega.eq mx x) || (Somega.eq mx y)));
       ])
 
-let somega_tests = consistency_tests
+let somega_tests = [
+  "tests of ordering of \\omega + 1", consistency_tests;
+]
 
-let suite = "test Somega" >::: somega_tests
-
-let _ = run_throwable_test suite
+let _ =
+  run_throwable_testslist somega_tests

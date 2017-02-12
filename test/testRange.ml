@@ -49,11 +49,11 @@ let intersect_tests =
       Range.at_least 20, Range.exact 4, Range.Void
     ]
 
-let range_tests =
-    intersect_tests
-  @ membership_tests
-  @ unmembership_tests
+let range_testslist = [
+  "range intersection tests", intersect_tests;
+  "range membership tests", membership_tests;
+  "range un-membership tests", unmembership_tests;
+]
 
-let suite = "test range" >::: range_tests
-
-let _ = run_throwable_test suite
+let _ =
+  run_throwable_testslist range_testslist
