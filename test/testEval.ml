@@ -47,8 +47,11 @@ let eval_eql_tests =
   ]
 ;;
 
-let eval_tests = prim_eql_tests @ eval_eql_tests
+let eval_testslist = [
+  "tests evaluating a value", prim_eql_tests;
+  "tests evaluating a reducible expression ", eval_eql_tests;
+]
 
-let suite = "test eval" >::: eval_tests
-
-let _ = run_throwable_test suite
+let _ =
+  let suites = List.map (fun (title, tests) -> title >::: tests) eval_testslist in
+  run_throwable_suites suites
