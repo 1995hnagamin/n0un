@@ -75,5 +75,4 @@ let parser_testslist = [
 
 
 let _ =
-  let suites = List.map (fun (title, tests) -> title >::: tests) parser_testslist in
-  run_throwable_suites suites
+  run_throwable_testslist parser_testslist

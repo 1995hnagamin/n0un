@@ -53,5 +53,4 @@ let eval_testslist = [
 ]
 
 let _ =
-  let suites = List.map (fun (title, tests) -> title >::: tests) eval_testslist in
-  run_throwable_suites suites
+  run_throwable_testslist eval_testslist
