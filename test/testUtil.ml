@@ -12,3 +12,9 @@ let run_throwable_test suite =
   then raise Failure
   else results
 ;;
+
+let run_throwable_suites suites =
+  let f suite =
+    let _ = run_throwable_test suite in ()
+  in
+  List.iter f suites
