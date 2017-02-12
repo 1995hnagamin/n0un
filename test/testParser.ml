@@ -67,8 +67,13 @@ let associativity_tests =
   ]
 
 
-let parser_tests = parse_tests @ precedence_tests @ associativity_tests
+let parser_testslist = [
+  "string parsing tests", parse_tests;
+  "precedence tests", precedence_tests;
+  "associativity tests", associativity_tests;
+]
 
-let suite = "test parser" >::: parser_tests
 
-let _ = run_throwable_test suite
+let _ =
+  let suites = List.map (fun (title, tests) -> title >::: tests) parser_testslist in
+  run_throwable_suites suites
