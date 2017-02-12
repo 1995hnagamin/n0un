@@ -36,7 +36,7 @@ let unmembership_tests =
 let intersect_tests =
   List.map
     (fun (a, b, result) ->
-      (Printf.sprintf "%s /\ %s = %s"
+      (Printf.sprintf "%s /\\ %s = %s"
           (Range.to_string a) (Range.to_string b) (Range.to_string result)) >::
         (fun test_ctxt -> assert_equal (Range.intersect a b) result))
     [
