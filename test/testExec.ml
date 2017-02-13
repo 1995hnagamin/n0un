@@ -16,7 +16,6 @@ let test_program (filename, expection) = filename >:: fun test_ctxt ->
   let prog = Parser.toplevel Lexer.main (Lexing.from_channel ic) in
   let _ = exec f Language.standard_init_env Language.standard_init_tyenv prog in
   assert_equal (List.rev!output) expection
-;;
 
 let test1_expc = [
   IntV 0,  TyInt;
@@ -28,12 +27,10 @@ let test1_expc = [
   IntV 42, TyInt;
   IntV 42, TyInt;
   ]
-;;
 
 let suite =
   "test exec" >::: List.map test_program [
     "sample/1.n0un", test1_expc;
   ]
-;;
 
 let _ = run_throwable_test suite

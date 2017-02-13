@@ -11,7 +11,6 @@ let exp_of_expval = function
 let eval_eql_test (title, result, expr) =
   title >:: 
     (fun test_ctxt -> assert_equal result ((exp_of_expval << eval Environment.empty) expr))
-;;
 
 let prim_eql_tests =
   List.map (fun (x, y) -> eval_eql_test (x, y, y)) [
@@ -22,7 +21,6 @@ let prim_eql_tests =
     "succ.zero", comp Succ Zero;
     "@1/2->zero", PRec(proj 1 2, Zero);
   ]
-;;
 
 let eval_eql_tests =
   List.map eval_eql_test [
@@ -45,7 +43,6 @@ let eval_eql_tests =
           PRec(proj 2 2, Zero)),
       apps (Var "mul") [6; 7]));
   ]
-;;
 
 let eval_testslist = [
   "tests evaluating a value", prim_eql_tests;

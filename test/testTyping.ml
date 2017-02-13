@@ -6,7 +6,6 @@ open Typing
 
 let ty_eql_test = fun (title, expr, ty) ->
   title >:: (fun test_ctxt -> assert_equal (eval_ty Environment.empty expr) ty)
-;;
 
 let ty_eql_tests =
   List.map ty_eql_test [
@@ -31,7 +30,6 @@ let ty_eql_tests =
           PRec(proj 2 2, Zero))),
       typfun 2;
   ]
-;;
 
 let ty_err_test = fun (title, expr, err) ->
   title >:: 
@@ -45,7 +43,6 @@ let untyped_expr_tests =
     "@1/3[Zero, @1/1, Succ]", Comp(proj 1 3, [Zero; proj 1 1; Succ]), "Arities of functions don't match";
     "@1/3[@1/1, Succ]", Comp(proj 1 3, [proj 1 1; Succ]), "Arity doesn't match"
   ]
-;;
 
 let wrong_apl_tests =
   List.map (fun (x, y) -> ty_err_test (x, y, "Arity doesn't match")) [
@@ -63,7 +60,6 @@ let wrong_apl_tests =
     "Let s = succ In s()", LetExp("s", Succ, App(Var "s", []));
     "Let u = @1/3 In u(1,2)", LetExp("u", proj 1 3, apps (Var "u") [1; 2]);
   ]
-;;
 
 let typing_testslist = [
   "typing tests (normal)", ty_eql_tests;
