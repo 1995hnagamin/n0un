@@ -50,7 +50,7 @@ let untyped_expr_tests =
 let wrong_apl_tests =
   List.map (fun (x, y) -> ty_err_test (x, y, "Arity doesn't match")) [
     "zero(0)", App(Zero, [Int 0]);
-    "succ()", App(Zero, []);
+    "succ()", App(Succ, []);
     "succ(1, 2, 3)", apps Zero [1; 2; 3];
     "@1/3(1, 2)", apps (proj 1 3) [1; 2];
     "@1/2(1, 2, 3)", apps (proj 1 2) [1; 2; 3];
