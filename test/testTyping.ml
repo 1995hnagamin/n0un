@@ -51,7 +51,7 @@ let wrong_apl_tests =
   List.map (fun (x, y) -> ty_err_test (x, y, "Arity doesn't match")) [
     "zero(0)", App(Zero, [Int 0]);
     "succ()", App(Succ, []);
-    "succ(1, 2, 3)", apps Zero [1; 2; 3];
+    "succ(1, 2, 3)", apps Succ [1; 2; 3];
     "@1/3(1, 2)", apps (proj 1 3) [1; 2];
     "@1/2(1, 2, 3)", apps (proj 1 2) [1; 2; 3];
     "(@1/2->zero)()", apps (PRec(proj 1 2, Zero)) [];
