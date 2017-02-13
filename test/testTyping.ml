@@ -68,6 +68,7 @@ let wrong_apl_tests =
 let typing_testslist = [
   "typing tests (normal)", ty_eql_tests;
   "typing tests (erroneous)", untyped_expr_tests;
+  "typing tests (erroneous, wrong function application)", wrong_apl_tests;
 ]
 
 let _ =
