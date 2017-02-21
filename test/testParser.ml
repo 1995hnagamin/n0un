@@ -32,6 +32,7 @@ let parse_tests =
     "@1 -> zero", PRec(proj_variadic 1, (Var "zero"));
     "zero()", App((Var "zero"), []);
     "succ(0)", App((Var "succ"), [Int 0]);
+    "@2/3(1, 2, 3)", App(proj 2 3, [Int 1; Int 2; Int 3]);
     "@1/3(zero(), succ(0), @1/2(2, 3))",
       App (proj 1 3,
            [App ((Var "zero"), []);
