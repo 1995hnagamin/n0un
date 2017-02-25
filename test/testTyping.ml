@@ -14,10 +14,21 @@ let ty_eql_tests =
     "succ: N->N(p)", Succ, typfun 1;
     "@1/2: N^2->N(p)", proj 1 2, typfun 2;
     "@3/5: N^5->N(p)", proj 3 5, typfun 5;
+    "@1: N^(1+)->N(p)", proj_variadic 1, typfun_variadic 1;
+    "@5: N^(5+)->N(p)", proj_variadic 5, typfun_variadic 5;
     "succ[zero]: {}->N(p)", comp Succ Zero, typfun 0;
     "@1/3[@1/2, @2/2, @1/2]: N^2->N(p)",
       Comp(proj 1 3, [proj 1 2;proj 2 2;proj 1 2]), typfun 2;
+    "@2[@1, @3, @5]: N^(5+)->N(p)",
+      Comp(proj_variadic 2, [proj_variadic 1; proj_variadic 3; proj_variadic 5]),
+      typfun_variadic 5;
+    "@2[@1, succ]: N^1->N(p)",
+      Comp(proj_variadic 2, [proj_variadic 1; Succ]), typfun 1;
     "@1/2->zero: N->N(p)", PRec(proj 1 2, Zero), typfun 1;
+    "@4->@3: N^(4+)->N(p)", PRec(proj_variadic 4, proj_variadic 3), typfun_variadic 4;
+    "@5->@3: N^(4+)->N(p)", PRec(proj_variadic 5, proj_variadic 3), typfun_variadic 4;
+    "@6->@3: N^(5+)->N(p)", PRec(proj_variadic 6, proj_variadic 3), typfun_variadic 5;
+    "@1/4->@2: N^(3)->N(p)", PRec(proj 1 4, proj_variadic 2), typfun 3;
     "Let z = 42 In succ(z)",
       LetExp("z", Int 0, App(Succ, [Var "z"])), TyInt;
     "Let f = succ In @2/2[@1/1, f]",
