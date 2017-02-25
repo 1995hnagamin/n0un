@@ -22,3 +22,5 @@ let proj_variadic x =
   Proj(x, Arity.at_least x)
 
 let typfun n = TyPFun (Arity.exact n)
+
+let typfun_variadic n = TyPFun (Arity.at_least n)
