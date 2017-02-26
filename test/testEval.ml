@@ -28,6 +28,8 @@ let eval_eql_tests =
     "succ(0)", Int 1, app Succ 0;
     "@3/3(1,2,succ(3))", Int 4,
       App(proj 3 3, [Int 1; Int 2; App(Succ, [Int 3])]);
+    "@1(1, 2, 3, 4, 5)", Int 1,
+      apps (proj_variadic 1) [1; 2; 3; 4; 5];
     "(@1/2->zero)(43)", Int 42, app (PRec(proj 1 2, Zero)) 43;
     "(succ.@3/3->@1/1)(10, 5)", Int 15,
       apps (PRec(comp Succ (proj 3 3), proj 1 1)) [10; 5];
