@@ -2,7 +2,9 @@
 
 FILES[] =
 	testUtil
+	testSomega
 	testParser
+	testRange
 	testTyping
 	testEval
 	testExec

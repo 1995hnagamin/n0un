@@ -16,4 +16,11 @@ let app f x = App(f, [Int x])
 
 let apps f xs = App(f, List.map (fun x -> Int x) xs)
 
-let proj x y = Proj(x, y)
+let proj x y = Proj(x, Arity.exact y)
+
+let proj_variadic x =
+  Proj(x, Arity.at_least x)
+
+let typfun n = TyPFun (Arity.exact n)
+
+let typfun_variadic n = TyPFun (Arity.at_least n)
