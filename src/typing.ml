@@ -29,7 +29,7 @@ let arity_comp t_g t_fs =
   | _ ->
     if not (Arity.is_applicable (List.length t_fs) k)
     then raise ( Typing_error "arity doesn't match" )
-    else k
+    else af
 
 let ty_fun env f k = if is_primitive env f then TyPFun k else TyRFun k
 
