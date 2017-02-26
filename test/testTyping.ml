@@ -52,7 +52,15 @@ let untyped_expr_tests =
     "100(0)", app (Int 100) 0, "Not a function";
     "succ(zero)", App(Succ, [Zero]), "Non-integer object is applied";
     "@1/3[Zero, @1/1, Succ]", Comp(proj 1 3, [Zero; proj 1 1; Succ]), "Arities of functions don't match";
-    "@1/3[@1/1, Succ]", Comp(proj 1 3, [proj 1 1; Succ]), "Arity doesn't match"
+    "@1/3[@1/1, Succ]", Comp(proj 1 3, [proj 1 1; Succ]), "Arity doesn't match";
+    "@1[]", Comp(proj_variadic 1, []), "Arity doesn't match";
+    "@10[@100, @200, @300, @400]",
+      Comp(proj_variadic 10, List.map proj_variadic [100; 200; 300; 400]),
+      "Arity doesn't match";
+    "@1/2[zero, @1]", Comp(proj 1 2, [Zero; proj_variadic 1]), "Arities of functions don't match";
+    "@1/3[succ, @1/1, @2]",
+      Comp(proj 1 2, [Zero; proj_variadic 1; proj_variadic 2]),
+      "Arities of functions don't match";
   ]
 
 let wrong_apl_tests =
