@@ -28,7 +28,7 @@ let arity_comp t_g t_fs =
     Range.Void -> raise ( Typing_error "Arities of functions don't match" )
   | _ ->
     if not (Arity.is_applicable (List.length t_fs) k)
-    then raise ( Typing_error "arity doesn't match" )
+    then raise ( Typing_error "Arity doesn't match" )
     else af
 
 let ty_fun env f k = if is_primitive env f then TyPFun k else TyRFun k
