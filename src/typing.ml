@@ -66,13 +66,7 @@ let rec eval_ty env = function
 | Comp(g, fs) ->
     let t_g  = eval_ty env g
     and t_fs = List.map (eval_ty env) fs in
-    let af = List.fold_left Arity.intersect (Arity.at_least 0) (List.map arity t_fs) in
-    (match af with
-      Range.Void -> raise (Typing_error "Arities of functions don't match")
-    | _ when not (Arity.is_applicable (List.length t_fs) (arity t_g))
-      -> raise (Typing_error "Arity doesn't match")
-    | _ when List.length t_fs = 0 -> t_g
-    | _ -> ty_fun env (Comp(g, fs)) ((arity << List.hd) t_fs))
+    ty_fun  env (Comp(g, fs)) (arity_comp t_g t_fs)
 | PRec(g, f) ->
     let y = arity (eval_ty env g)
     and x = arity (eval_ty env f) in
