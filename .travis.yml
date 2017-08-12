@@ -2,7 +2,7 @@ language: c
 sudo: required
 install: "wget 'https://raw.githubusercontent.com/ocaml/ocaml-travisci-skeleton/master/.travis-ocaml.sh'; bash -ex .travis-ocaml.sh"
 script:
-  - opam install ounit omake
+  - opam install -y ounit omake
   - omake test
 env:
   - OCAML_VERSION=4.01
