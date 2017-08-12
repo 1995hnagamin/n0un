@@ -1,11 +1,9 @@
 language: c
 sudo: required
+install: wget https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.travis-opam.sh
 script:
-  - yes | sudo add-apt-repository ppa:avsm/ppa
-  - sudo apt-get update
-  - sudo apt-get install ocaml ocaml-native-compilers camlp4-extra opam
-  - export OPAMYES=1
-  - opam init
+  - eval $(opam config env)
+  - bash -ex .travis-opam.sh
   - opam install ounit omake
   - export PATH=$HOME/.opam/system/bin:$PATH
   - omake
