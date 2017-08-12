@@ -2,6 +2,7 @@ language: c
 sudo: required
 install: wget https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.travis-opam.sh
 script:
+  - eval $(opam config env)
   - bash -ex .travis-opam.sh
   - opam install ounit omake
   - export PATH=$HOME/.opam/system/bin:$PATH
