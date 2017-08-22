@@ -1,9 +1,10 @@
 open Syntax
+open Util
 
 let (standard_init_env, standard_init_tyenv) =
   let standard_ids = [
-    "zero", Zero, (TyPFun 0);
-    "succ", Succ, (TyPFun 1);
+    "zero", Zero, typfun 0;
+    "succ", Succ, typfun 1;
   ] in
   List.fold_left
     (fun (env, tyenv) (id, exp, ty) ->

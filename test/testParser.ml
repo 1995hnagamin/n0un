@@ -20,25 +20,40 @@ let parse_tests =
     "10", Int 10;
     "zero", Var "zero";
     "succ", Var "succ";
-    "@1/10", Proj(1, 10);
+    "@1/10", proj 1 10;
+    "@1", proj_variadic 1;
+    "@20", proj_variadic 20;
     
     "succ[zero]", Comp((Var "succ"), [(Var "zero")]);
     "@1/4[@1/3, @2/3, @3/3, @1/3]", 
-      Comp(Proj(1,4), [Proj(1,3); Proj(2,3); Proj(3,3); Proj(1,3)]);
+      Comp(proj 1 4, [proj 1 3; proj 2 3; proj 3 3; proj 1 3]);
+    "@2[@3->add, @2/2, @1]",
+      Comp(proj_variadic 2,
+        [PRec(proj_variadic 3, (Var "add"));
+         proj 2 2;
+         proj_variadic 1]);
     "succ.zero", Comp((Var "succ"), [(Var "zero")]);
-    "@1/2 -> zero", PRec(Proj(1,2), (Var "zero"));
+    "@1/2 -> zero", PRec(proj 1 2, (Var "zero"));
+    "@1 -> zero", PRec(proj_variadic 1, (Var "zero"));
+    "func -> @4", PRec((Var "func"), proj_variadic 4);
     "zero()", App((Var "zero"), []);
     "succ(0)", App((Var "succ"), [Int 0]);
-    "@1/3(zero(), succ(0), @1/2(2, 3))",
-      App (Proj(1, 3),
+    "@2/3(1, 2, 3)", App(proj 2 3, [Int 1; Int 2; Int 3]);
+    "@3(1, 2, 3, 4)", App(proj_variadic 3, [Int 1; Int 2; Int 3; Int 4]);
+    "@1/3(zero(), succ(0), @1(2, 3))",
+      App (proj 1 3,
            [App ((Var "zero"), []);
             App ((Var "succ"), [Int 0]);
-            App (Proj(1,2), [Int 2; Int 3])]);
+            App (proj_variadic 1, [Int 2; Int 3])]);
     "Let x = 1 In x", LetExp("x", Int 1, Var "x");
     "Let f = succ In Let x = succ(42) In f(x)",
       LetExp("f", (Var "succ"),
       LetExp("x", app (Var "succ") 42,
       App(Var "f", [Var "x"])));
+    "Let g = @1 In @1[g,g](1,2,3)",
+      LetExp("g", proj_variadic 1,
+      App(Comp(proj_variadic 1, [Var "g"; Var "g"]),
+          [Int 1; Int 2; Int 3]));
   ]
 
 
@@ -64,8 +79,12 @@ let associativity_tests =
   ]
 
 
-let parser_tests = parse_tests @ precedence_tests @ associativity_tests
+let parser_testslist = [
+  "string parsing tests", parse_tests;
+  "precedence tests", precedence_tests;
+  "associativity tests", associativity_tests;
+]
 
-let suite = "test parser" >::: parser_tests
 
-let _ = run_throwable_test suite
+let _ =
+  run_throwable_testslist parser_testslist

@@ -6,32 +6,41 @@ open Typing
 
 let ty_eql_test = fun (title, expr, ty) ->
   title >:: (fun test_ctxt -> assert_equal (eval_ty Environment.empty expr) ty)
-;;
 
 let ty_eql_tests =
   List.map ty_eql_test [
     "0: TyInt", Int 0, TyInt;
-    "zero: {}->N(p)", Zero, TyPFun 0;
-    "succ: N->N(p)", Succ, TyPFun 1;
-    "@1/2: N^2->N(p)", Proj(1,2), TyPFun 2;
-    "@3/5: N^5->N(p)", Proj(3,5), TyPFun 5;
-    "succ[zero]: {}->N(p)", comp Succ Zero, TyPFun 0;
+    "zero: {}->N(p)", Zero, typfun 0;
+    "succ: N->N(p)", Succ, typfun 1;
+    "@1/2: N^2->N(p)", proj 1 2, typfun 2;
+    "@3/5: N^5->N(p)", proj 3 5, typfun 5;
+    "@1: N^(1+)->N(p)", proj_variadic 1, typfun_variadic 1;
+    "@5: N^(5+)->N(p)", proj_variadic 5, typfun_variadic 5;
+    "succ[zero]: {}->N(p)", comp Succ Zero, typfun 0;
     "@1/3[@1/2, @2/2, @1/2]: N^2->N(p)",
-      Comp(Proj(1,3), [Proj(1,2);Proj(2,2);Proj(1,2)]), TyPFun 2;
-    "@1/2->zero: N->N(p)", PRec(Proj(1,2), Zero), TyPFun 1;
+      Comp(proj 1 3, [proj 1 2;proj 2 2;proj 1 2]), typfun 2;
+    "@2[@1, @3, @5]: N^(5+)->N(p)",
+      Comp(proj_variadic 2, [proj_variadic 1; proj_variadic 3; proj_variadic 5]),
+      typfun_variadic 5;
+    "@2[@1, succ]: N^1->N(p)",
+      Comp(proj_variadic 2, [proj_variadic 1; Succ]), typfun 1;
+    "@1/2->zero: N->N(p)", PRec(proj 1 2, Zero), typfun 1;
+    "@4->@3: N^(4+)->N(p)", PRec(proj_variadic 4, proj_variadic 3), typfun_variadic 4;
+    "@5->@3: N^(4+)->N(p)", PRec(proj_variadic 5, proj_variadic 3), typfun_variadic 4;
+    "@6->@3: N^(5+)->N(p)", PRec(proj_variadic 6, proj_variadic 3), typfun_variadic 5;
+    "@1/4->@2: N^(3)->N(p)", PRec(proj 1 4, proj_variadic 2), typfun 3;
     "Let z = 42 In succ(z)",
       LetExp("z", Int 0, App(Succ, [Var "z"])), TyInt;
     "Let f = succ In @2/2[@1/1, f]",
-      LetExp("f", Succ, Comp(Proj(2,2), [Proj(1,1); Var "f"])), TyPFun 1;
+      LetExp("f", Succ, Comp(proj 2 2, [proj 1 1; Var "f"])), typfun 1;
     "Let add = succ.@3/3->@1/1 In add[@1/3, @3/3] -> @2/2 -> zero",
       LetExp(
         "add",
         PRec(comp Succ (proj 1 3), proj 1 1),
           PRec(Comp(Var "add", [proj 1 3; proj 3 3]),
           PRec(proj 2 2, Zero))),
-      TyPFun 2;
+      typfun 2;
   ]
-;;
 
 let ty_err_test = fun (title, expr, err) ->
   title >:: 
@@ -42,33 +51,40 @@ let untyped_expr_tests =
   List.map ty_err_test [
     "100(0)", app (Int 100) 0, "Not a function";
     "succ(zero)", App(Succ, [Zero]), "Non-integer object is applied";
-    "@1/3[Zero, @1/1, Succ]", Comp(Proj(1,3), [Zero; Proj(1,1); Succ]), "Arities of functions don't match";
-    "@1/3[@1/1, Succ]", Comp(Proj(1,3), [Proj(1,1); Succ]), "Arity doesn't match"
+    "@1/3[Zero, @1/1, Succ]", Comp(proj 1 3, [Zero; proj 1 1; Succ]), "Arities of functions don't match";
+    "@1/3[@1/1, Succ]", Comp(proj 1 3, [proj 1 1; Succ]), "Arity doesn't match";
+    "@1[]", Comp(proj_variadic 1, []), "Arity doesn't match";
+    "@10[@100, @200, @300, @400]",
+      Comp(proj_variadic 10, List.map proj_variadic [100; 200; 300; 400]),
+      "Arity doesn't match";
+    "@1/2[zero, @1]", Comp(proj 1 2, [Zero; proj_variadic 1]), "Arities of functions don't match";
+    "@1/3[succ, @1/1, @2]",
+      Comp(proj 1 2, [Zero; proj_variadic 1; proj_variadic 2]),
+      "Arities of functions don't match";
   ]
-;;
 
 let wrong_apl_tests =
   List.map (fun (x, y) -> ty_err_test (x, y, "Arity doesn't match")) [
     "zero(0)", App(Zero, [Int 0]);
-    "succ()", App(Zero, []);
-    "succ(1, 2, 3)", apps Zero [1; 2; 3];
-    "@1/3(1, 2)", apps (Proj(1,3)) [1; 2];
-    "@1/2(1, 2, 3)", apps (Proj(1,2)) [1; 2; 3];
-    "(@1/2->zero)()", apps (PRec(Proj(1,2), Zero)) [];
+    "succ()", App(Succ, []);
+    "succ(1, 2, 3)", apps Succ [1; 2; 3];
+    "@1/3(1, 2)", apps (proj 1 3) [1; 2];
+    "@1/2(1, 2, 3)", apps (proj 1 2) [1; 2; 3];
+    "(@1/2->zero)()", apps (PRec(proj 1 2, Zero)) [];
     "(succ.@3/3->@1/1)(1,2,3)",
-      apps (PRec(comp Succ (Proj(3,3)), Proj(1,1))) [1; 2; 3];
+      apps (PRec(comp Succ (proj 3 3), proj 1 1)) [1; 2; 3];
     "(succ.zero)(1)", app (comp Succ Zero) 1;
     "@1/2[@1/3, @2/3](1)",
       app (Comp (proj 1 2, [proj 1 3; proj 2 3])) 1;
     "Let s = succ In s()", LetExp("s", Succ, App(Var "s", []));
     "Let u = @1/3 In u(1,2)", LetExp("u", proj 1 3, apps (Var "u") [1; 2]);
   ]
-;;
 
-let typing_tests =
-  ty_eql_tests @ untyped_expr_tests
-;;
+let typing_testslist = [
+  "typing tests (normal)", ty_eql_tests;
+  "typing tests (erroneous)", untyped_expr_tests;
+  "typing tests (erroneous, wrong function application)", wrong_apl_tests;
+]
 
-let suite = "test typing" >::: typing_tests
-
-let _ = run_throwable_test suite
+let _ =
+  run_throwable_testslist typing_testslist

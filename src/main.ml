@@ -1,7 +1,11 @@
 open Syntax
 open Util
 
-let output_line = function
+let output_expval expval =
+    (print_string << Eval.string_of_expval) expval;
+    print_newline ()
+
+let repl_output = function
   Exec.ActBind(id, expval, ty) ->
     print_string id;
     print_string " = ";
@@ -9,11 +13,9 @@ let output_line = function
     print_string " : ";
     (print_string << string_of_ty) ty;
     print_newline ()
-| Exec.ActPrint(expval, ty) ->
-    (print_string << Eval.string_of_expval) expval;
-    print_newline ()
+| Exec.ActPrint(expval, _) -> output_expval expval
 
-let print_program env tyenv = Exec.exec output_line env tyenv
+let print_program env tyenv = Exec.exec repl_output env tyenv
 
 let rec repl env tyenv =
   print_string "# ";
@@ -26,7 +28,10 @@ let rec repl env tyenv =
 let exec_file filename =
   let ic = open_in filename in
   let program = Parser.toplevel Lexer.main (Lexing.from_channel ic) in
-  print_program Environment.empty Environment.empty program
+  let f x = (match x with
+      Exec.ActPrint(expval, _) -> output_expval expval
+    | _ -> ()) in
+  Exec.exec f Language.standard_init_env Language.standard_init_tyenv program
 
 let _ =
   if Array.length Sys.argv > 1
