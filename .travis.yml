@@ -6,7 +6,7 @@ script:
   - export PATH=$HOME/.opam/4.01.0/bin:$PATH
   - echo $PATH
   - omake test
-  - sh test/executable/test.sh
+  - omake; sh test/executable/test.sh
 env:
   - OCAML_VERSION=4.01
 os:
